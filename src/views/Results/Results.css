@@ -1,0 +1,30 @@
+.before {
+  background: #00D1B2;
+}
+
+.after {
+  background: #FFDD57;
+}
+
+table td,
+table th {
+  text-align: center;
+  vertical-align: center;
+  font-size: .9rem;
+}
+
+.table tr:hover {
+  background-color: #fafafa;
+}
+
+.table thead td,
+.table thead th {
+  border-width: 0 0 2px;
+  text-align: center;
+  color: #363636;
+}
+
+.center-image {
+  width: 100;
+  margin: 0 auto
+}
