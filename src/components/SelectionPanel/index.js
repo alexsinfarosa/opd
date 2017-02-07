@@ -15,39 +15,35 @@ class SelectionPanel extends Component {
   @observable temperature = ''
   @observable id = ''
 
+  avgString = (a, b) => {
+    const aNum = parseFloat(a)
+    const bNum = parseFloat(b)
+    return (Math.round((aNum+bNum)/2)).toString()
+  }
+
   @action calculateDegreeDays = () => {
     const {ACISData, pest, cumulativeDegreeDays} = this.props.store.app
-    const min = ACISData.map(day => Math.min(...day[1]))
-    const max = ACISData.map(day => Math.max(...day[1]))
-    const avg = min.map((val, i) => (Math.round((val + max[i])/2)))
+
+    // Finding and replacing 'M' values
+    const replacedACISData = ACISData.map(day => day[1].map((val,i) => val === 'M' ? day[1][i] = this.avgString(day[1][i-1], day[1][i+1]) : val))
+
+    // Starting calculating degree days
+    const min = replacedACISData.map(day => Math.min(...day))
+    const max = replacedACISData.map(day => Math.max(...day))
+    const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
     const base = pest.baseTemp
-    const dd = avg.map(val => {
-      if (val-base > 0) {
-        return val
-      } else {
-        return 0
-      }
-    })
-    // Store dd in the store
+    const dd = avg.map(val => val-base > 0 ? val-base : 0)
     this.props.store.app.degreeDay = dd
 
-    // Store cumulativeDegreeDays in the store
+    // Calculate and store cumulativeDegreeDays values
     dd.reduce((prev, curr, i) => this.props.store.app.cumulativeDegreeDays[i] = prev + curr, 0)
 
-    // If there are stages chose the one the has a current dd value between ddlo and ddhi
+    // If there are stages chose the one where the current dd value is between ddlo and ddhi
     if (pest.preBiofix.length > 0) {
       const selectedStage = pest.preBiofix.filter(stage => (cumulativeDegreeDays[cumulativeDegreeDays.length - 1] > stage.ddlo && cumulativeDegreeDays[cumulativeDegreeDays.length - 1] < stage.ddhi))
       this.props.store.app.stage = selectedStage[0]
     }
-    // console.log(mobx.toJS(this.props.store.app.stage))
-
   }
-
-  // checkMissingValues = () => {
-  //   const { ACISData } = this.props.store.app
-  //   const mValues = ACISData.filter(station => station[station.length - 1]).map(value => value === 'M')
-  //   console.log(mValues.sclice())
-  // }
 
   @action getACISdata = () => {
     const { station, endDate } = this.props.store.app
