@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import mobx, {action} from 'mobx';
+import {action} from 'mobx';
 
 @inject('store') @observer
 class PestSelector extends Component {
@@ -12,7 +12,7 @@ class PestSelector extends Component {
   }
 
   render () {
-    console.log(mobx.toJS(this.props.store.app.pest))
+    // console.log(mobx.toJS(this.props.store.app.pest))
     const {pests, pest} = this.props.store.app;
     const pestList = pests.map(pest => <option key={pest.id}>{pest.informalName}</option>)
 

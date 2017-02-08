@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react'
-import mobx, { action, computed } from 'mobx';
+import { action, computed } from 'mobx';
 
 import newaPic from './newa_logo.jpg'
 import pmepPic from './pmep_logo.jpg'
@@ -27,8 +27,8 @@ class ResultsView extends Component {
   }
 
   render () {
-  const { pest, degreeDay, station, startDate, endDate, stage, ACISData, cumulativeDegreeDays } = this.props.store.app
-  console.log(degreeDay.slice(), cumulativeDegreeDays.slice(), mobx.toJS(stage))
+  const { pest, degreeDay, station, startDate, endDate, stage, ACISData, cumulativeDegreeDay } = this.props.store.app
+  // console.log(degreeDay.slice(), cumulativeDegreeDay.slice(), mobx.toJS(stage))
   return (
     <section className="hero">
       <div className="hero-body">
@@ -42,7 +42,7 @@ class ResultsView extends Component {
                 {pest.informalName} Results for {station.name}
               </h1>
               <h2 className="subtitle is-6">
-                Accumulated Degree Days (<strong>{pest.baseTemp}°F</strong>) <strong>{startDate}</strong> through <strong>{endDate.toLocaleDateString()}</strong>: <strong>{cumulativeDegreeDays[cumulativeDegreeDays.length - 1]}</strong> (0 days missing)
+                Accumulated Degree Days (<strong>{pest.baseTemp}°F</strong>) <strong>{startDate}</strong> through <strong>{endDate.toLocaleDateString()}</strong>: <strong>{cumulativeDegreeDay[cumulativeDegreeDay.length - 1]}</strong> (0 days missing)
               </h2>
             </div>
           </div>
@@ -68,9 +68,9 @@ class ResultsView extends Component {
                   </tr>
                   <tr>
                     <th></th>
-                    <th className="before">{moment(ACISData[ACISData.length - 3][0]).format('MMM D')}</th>
-                    <th className="before">{moment(ACISData[ACISData.length - 2][0]).format('MMM D')}</th>
-                    <th className="before">{moment(ACISData[ACISData.length - 1][0]).format('MMM D')}</th>
+                    <th className="before">{!ACISData ? '' : moment(ACISData[ACISData.length - 3][0]).format('MMM D')}</th>
+                    <th className="before">{!ACISData ? '' : moment(ACISData[ACISData.length - 2][0]).format('MMM D')}</th>
+                    <th className="before">{!ACISData ? '' : moment(ACISData[ACISData.length - 1][0]).format('MMM D')}</th>
                     <th className="after">-</th>
                     <th className="after">-</th>
                     <th className="after">-</th>
@@ -92,9 +92,9 @@ class ResultsView extends Component {
                   </tr>
                   <tr>
                     <th>Accumulation since January 1st</th>
-                    <td>{cumulativeDegreeDays[cumulativeDegreeDays.length - 3]}</td>
-                    <td>{cumulativeDegreeDays[cumulativeDegreeDays.length - 2]}</td>
-                    <td>{cumulativeDegreeDays[cumulativeDegreeDays.length - 1]}</td>
+                    <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 3]}</td>
+                    <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 2]}</td>
+                    <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 1]}</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>

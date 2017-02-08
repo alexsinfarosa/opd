@@ -15,8 +15,8 @@ class DateSelector extends Component {
   }
 
   render () {
-    const {startDate, endDate} = this.props.store.app
-    console.log(`startDate: ${startDate} - endDate: ${endDate}`)
+    const {endDate} = this.props.store.app
+    // console.log(`startDate: ${startDate} - endDate: ${endDate}`)
     return (
       <div>
         <label className="label">Accumulation End Date:</label>
