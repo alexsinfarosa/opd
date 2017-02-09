@@ -1776,6 +1776,12 @@ console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
 
+console.table@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/console.table/-/console.table-0.8.0.tgz#69e91d2eabfcced9a0c877ea670b251c6bdbd35f"
+  dependencies:
+    easy-table "1.0.0"
+
 constant-case@^1.1.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/constant-case/-/constant-case-1.1.2.tgz#8ec2ca5ba343e00aa38dbf4e200fd5ac907efd63"
@@ -2285,6 +2291,10 @@ dotenv@2.0.0:
 duplexer@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
+
+easy-table@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/easy-table/-/easy-table-1.0.0.tgz#29db2d0855d36316e4382e5a3d85d9cb5fc93216"
 
 ecc-jsbn@~0.1.1:
   version "0.1.1"

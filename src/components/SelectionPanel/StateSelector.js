@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import {action} from 'mobx';
+import mobx, {action} from 'mobx';
 import views from 'config/views';
 import {states} from '../../utils'
 
@@ -20,7 +20,7 @@ class StateSelector extends Component {
   }
 
   render () {
-    // console.log(mobx.toJS(this.props.store.app.state))
+    console.log(mobx.toJS(this.props.store.app.state))
     const {state} = this.props.store.app
     const stateList = this.states.map(state =>
       <option key={state.postalCode}>{state.name}</option>)

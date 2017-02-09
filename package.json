@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "bulma": "^0.3.1",
+    "console.table": "^0.8.0",
     "google-map-react": "^0.22.3",
     "lodash": "^4.17.4",
     "mobx": "^3.0.1",

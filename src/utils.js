@@ -132,3 +132,22 @@ export const calculateCumulativeDegreeDay = (degreeDayData) => {
 }
 
 // console.log(`Cumulative Degree Day: ${calculateCumulativeDegreeDay(calculateDegreeDay(fakeData))}`)
+
+// Adjust Temperature parameter and Michigan network id
+export const temperatureAdjustment = (station) => {
+  // Handling different temperature parameter for each network
+  if (station.network === 'newa' || station.network === 'icao' || station.network === 'njwx') {
+    return '23'
+  } else if (station.network === 'miwx' || station.network === 'cu_log') {
+    return '126'
+  }
+}
+
+// Handling Michigan state network
+export const michiganAdjustment = (station) => {
+  if (station.state === 'MI' && station.network === 'miwx' && station.id.slice(0,3) === 'ew_') {
+    // example: ew_ITH
+    return station.id.slice(3,6)
+  }
+  return station.id
+}

@@ -24,6 +24,11 @@ class AppStore {
     return results
   }
 
+  @computed get getFilteredStations () {
+    // const { stations, state } = this.props.store.app
+    return this.stations.filter(station => station.state === this.state.postalCode)
+  }
+
   @action addIconsToStations = () => {
     const tempArr = []
     const newa = 'http://newa.nrcc.cornell.edu/gifs/newa_small.png'
