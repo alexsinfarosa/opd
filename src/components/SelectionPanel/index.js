@@ -18,7 +18,7 @@ class SelectionPanel extends Component {
   @observable id = ''
 
   @action getACISdata = () => {
-    const { pest, cumulativeDegreeDay, station, endDate } = this.props.store.app
+    const { pest, station, endDate } = this.props.store.app
     const {router} = this.props.store
     const {store} = this.props
 
@@ -42,12 +42,12 @@ class SelectionPanel extends Component {
       elems: this.temperature
     }
 
-    console.log(`Post Request with following values: ${params.sid}, ${params.sdate}, ${params.edate}, ${params.elems}`)
+    console.log(`POST request: sid: ${params.sid}, sdate: ${params.sdate}, edate: ${params.edate}, elems: ${params.elems}`)
     return axios.post("http://data.test.rcc-acis.org/StnData", params)
       .then(res => {
         this.updateData(res.data.data)
         this.calculateDegreeDay(res.data.data)
-        this.calculateStageToDisplay(pest, cumulativeDegreeDay)
+        this.calculateStageToDisplay(pest)
         router.goTo(views.results, {id: 111}, store)
       })
       .catch(err => {
@@ -61,6 +61,7 @@ class SelectionPanel extends Component {
   }
 
   @action calculateDegreeDay = (data) => {
+    const { pest } = this.props.store.app
 
     // Creating an array only of hourly data
     const hourlyData = data.map(day => day[1])
@@ -94,7 +95,7 @@ class SelectionPanel extends Component {
     const min = hourlyDataWithReplacedValues.map(day => Math.min(...day))
     const max = hourlyDataWithReplacedValues.map(day => Math.max(...day))
     const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
-    const base = 50
+    const base = pest.baseTemp
     const dd = avg.map(val => val-base > 0 ? val-base : 0)
     console.log(`Min: ${min}`)
     console.log(`Max: ${max}`)
@@ -106,11 +107,9 @@ class SelectionPanel extends Component {
   // If there are stages chose the one where the current dd value is between ddlo and ddhi
   @action calculateStageToDisplay = (pest) => {
     const {cumulativeDegreeDay} = this.props.store.app
-    const lastIndex = cumulativeDegreeDay[cumulativeDegreeDay.length - 1]
+    const currentDegreeDayValue = cumulativeDegreeDay[cumulativeDegreeDay.length - 1]
     if (pest.preBiofix.length > 0) {
-      const selectedStage = pest.preBiofix.filter(stage => (lastIndex > stage.ddlo && lastIndex < stage.ddhi))
-
-      console.log(selectedStage[0])
+      const selectedStage = pest.preBiofix.filter(stage => (currentDegreeDayValue > stage.ddlo && currentDegreeDayValue < stage.ddhi))
       this.props.store.app.stage = selectedStage[0]
     }
   }

@@ -21,7 +21,6 @@ class AppStore {
   @computed get cumulativeDegreeDay() {
     const results = []
     this.degreeDay.reduce((prev, curr, i) => results[i] = prev + curr, 0)
-    console.log(results)
     return results
   }
 
