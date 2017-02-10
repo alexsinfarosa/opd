@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import {action} from 'mobx';
+// import mobx from 'mobx';
 
 @inject('store') @observer
 class PestSelector extends Component {
-
-  @action setPest = (e) => {
-    const {pests} = this.props.store.app
-    const selectedPest = pests.filter(pest => pest.informalName === e.target.value)
-    this.props.store.app.pest = selectedPest[0]
-  }
 
   render () {
     // console.log(mobx.toJS(this.props.store.app.pest))
@@ -23,7 +17,7 @@ class PestSelector extends Component {
           <span className="select">
             <select
               value={pest.informalName}
-              onChange={this.setPest}
+              onChange={this.props.store.app.setPest}
             >
               <option>Select Pest</option>
               {pestList}

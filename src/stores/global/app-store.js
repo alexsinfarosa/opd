@@ -1,62 +1,70 @@
 import {observable, action, computed} from 'mobx';
 import pestData from '../../../public/pestData.json';
+import {states, matchIconsToStations} from '../../utils';
 
 class AppStore {
+
+// pest ------------------------------------------------------------------------
   @observable pests = pestData;
+  @observable pest = {};
+  @action setPest = (e) => {
+    const selectedPest = this.pests.filter(pest => pest.informalName === e.target.value)[0]
+    this.pest = selectedPest
+  }
+
+// state -----------------------------------------------------------------------
+  @observable state = {};
+  @action updateState = (e) => {
+    const selectedState = states.filter(state => state.name === e.target.value)[0]
+    this.state = selectedState
+  }
+
+// stations --------------------------------------------------------------------
   @observable stations = [];
   @observable filteredStations = [];
-
-  @observable pest = {};
-  @observable state = {};
+  @action updateFilteredStations = () => {
+    this.filteredStations = matchIconsToStations(this.stations, this.state)
+  }
+  @computed get getFilteredStations () {
+    return this.stations.filter(station => station.state === this.state.postalCode)
+  }
   @observable station = {};
-  @observable startDate = '';
-  @observable endDate = new Date();
+  @action updateStation = (e) => {
+    const selectedStation = this.stations.filter(station => station.name === e.target.value)[0]
+    this.station = selectedStation
+  }
+
+// DATES -----------------------------------------------------------------------
+@observable startDate = '';
+@observable endDate = new Date();
+@action handleDayClick = (e, endDate) => {
+  this.endDate = endDate
+  const startDate = `01/01/${endDate.getFullYear()}`
+  this.startDate = startDate
+}
+
+// stage -----------------------------------------------------------------------
   @observable stage = {};
+  @action updateStage = (d) => {
+    this.stage = d
+  }
 
+// ACISData --------------------------------------------------------------------
   @observable ACISData = [];
+  @action updateACISData = (d) => {
+    this.ACISData = d
+  }
 
+// degreeDay -------------------------------------------------------------------
   @observable degreeDay = [];
-  // @observable cumulativeDegreeDay = [];
-
+  @action updateDegreeDay = (d) => {
+    this.degreeDay = d
+  }
   @computed get cumulativeDegreeDay() {
     const results = []
     this.degreeDay.reduce((prev, curr, i) => results[i] = prev + curr, 0)
     return results
   }
-
-  @computed get getFilteredStations () {
-    // const { stations, state } = this.props.store.app
-    return this.stations.filter(station => station.state === this.state.postalCode)
-  }
-
-  @action addIconsToStations = () => {
-    const tempArr = []
-    const newa = 'http://newa.nrcc.cornell.edu/gifs/newa_small.png'
-    const newaGray = 'http://newa.nrcc.cornell.edu/gifs/newa_smallGray.png'
-    const airport = 'http://newa.nrcc.cornell.edu/gifs/airport.png'
-    const airportGray = 'http://newa.nrcc.cornell.edu/gifs/airportGray.png'
-    const culog = 'http://newa.nrcc.cornell.edu/gifs/culog.png'
-    const culogGray = 'http://newa.nrcc.cornell.edu/gifs/culogGray.png'
-
-    this.stations.forEach(station => {
-      if (station.network === "newa" || station.network === "njwx" || station.network === "miwx" || (station.network === "cu_log" && station.state !== "NY")) {
-        const newObj = station
-        station.state === this.state.postalCode || this.state.postalCode === "ALL" ? newObj['icon'] = newa : newObj['icon'] = newaGray;
-        tempArr.push(newObj)
-      } else if (station.network === "cu_log") {
-        const newObj = station
-        station.state === this.state.postalCode || this.state.postalCode === "ALL" ? newObj['icon'] = culog : newObj['icon'] = culogGray
-        newObj['icon'] = culog
-        tempArr.push(newObj)
-      } else if (station.network === "icao") {
-        const newObj = station
-        station.state === this.state.postalCode || this.state.postalCode === "ALL" ? newObj['icon'] = airport : newObj['icon'] = airportGray
-        tempArr.push(newObj)
-      }
-    })
-    this.filteredStations = tempArr
-  };
-
 }
 
 export default AppStore;

@@ -30,7 +30,6 @@ class AppComponent extends Component {
       const stations = res.data.stations
       this.props.store.app.stations = stations
       // console.log('Fetch method fired')
-      // stations.filter(station => station.state === 'MI').map(station => console.log(station))
     })
     .catch(err => {
       console.log(err)

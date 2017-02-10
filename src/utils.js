@@ -134,11 +134,11 @@ export const calculateCumulativeDegreeDay = (degreeDayData) => {
 // console.log(`Cumulative Degree Day: ${calculateCumulativeDegreeDay(calculateDegreeDay(fakeData))}`)
 
 // Adjust Temperature parameter and Michigan network id
-export const temperatureAdjustment = (station) => {
+export const temperatureAdjustment = (network) => {
   // Handling different temperature parameter for each network
-  if (station.network === 'newa' || station.network === 'icao' || station.network === 'njwx') {
+  if (network === 'newa' || network === 'icao' || network === 'njwx') {
     return '23'
-  } else if (station.network === 'miwx' || station.network === 'cu_log') {
+  } else if (network === 'miwx' || network === 'cu_log') {
     return '126'
   }
 }
@@ -151,3 +151,36 @@ export const michiganAdjustment = (station) => {
   }
   return station.id
 }
+
+export const reduceArrayToOneDimension = (data) => {
+  const hourlyData = data.map(day => day[1])
+  return [].concat(...hourlyData)
+}
+
+export const matchIconsToStations = (stations, state) => {
+  const results = []
+  const newa = 'http://newa.nrcc.cornell.edu/gifs/newa_small.png'
+  const newaGray = 'http://newa.nrcc.cornell.edu/gifs/newa_smallGray.png'
+  const airport = 'http://newa.nrcc.cornell.edu/gifs/airport.png'
+  const airportGray = 'http://newa.nrcc.cornell.edu/gifs/airportGray.png'
+  const culog = 'http://newa.nrcc.cornell.edu/gifs/culog.png'
+  const culogGray = 'http://newa.nrcc.cornell.edu/gifs/culogGray.png'
+
+  stations.forEach(station => {
+    if (station.network === "newa" || station.network === "njwx" || station.network === "miwx" || (station.network === "cu_log" && station.state !== "NY")) {
+      const newObj = station
+      station.state === state.postalCode || state.postalCode === "ALL" ? newObj['icon'] = newa : newObj['icon'] = newaGray;
+      results.push(newObj)
+    } else if (station.network === "cu_log") {
+      const newObj = station
+      station.state === state.postalCode || state.postalCode === "ALL" ? newObj['icon'] = culog : newObj['icon'] = culogGray
+      newObj['icon'] = culog
+      results.push(newObj)
+    } else if (station.network === "icao") {
+      const newObj = station
+      station.state === state.postalCode || state.postalCode === "ALL" ? newObj['icon'] = airport : newObj['icon'] = airportGray
+      results.push(newObj)
+    }
+  })
+  return results
+};

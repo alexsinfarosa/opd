@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import mobx, {action} from 'mobx';
+import mobx from 'mobx';
 
 @inject('store') @observer
 class StationSelector extends Component {
-
-  @action setStation = (e) => {
-    const {stations} = this.props.store.app
-    const selectedStation = stations.filter(station => station.name === e.target.value)
-    this.props.store.app.station = selectedStation[0]
-  }
 
   render () {
     console.log(mobx.toJS(this.props.store.app.station))
@@ -24,7 +18,7 @@ class StationSelector extends Component {
           <span className="select">
             <select
               value={station.name}
-              onChange={this.setStation}
+              onChange={this.props.store.app.updateStation}
             >
               <option>Select Station</option>
               {stationList}
