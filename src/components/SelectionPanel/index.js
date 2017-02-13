@@ -3,6 +3,8 @@ import {inject, observer} from 'mobx-react';
 import views from 'config/views';
 // import { action } from 'mobx'
 import axios from "axios"
+import {format} from 'date-fns'
+
 
 import PestSelector from './PestSelector';
 import StateSelector from './StateSelector';
@@ -19,15 +21,15 @@ import { avgString,
 class SelectionPanel extends Component {
 
   getACISdata = () => {
-    const {pest, station, endDate} = this.props.store.app
+    const {pest, station, endDate, startDate} = this.props.store.app
     const {router} = this.props.store
     const {store} = this.props
 
     // Creating the object for the POST request
     const params = {
       sid: `${michiganAdjustment(station)} ${station.network}`,
-      sdate: `${endDate.getFullYear()}-01-01`,
-      edate: endDate.toISOString().split('T')[0],
+      sdate: format(startDate, 'YYYY-MM-DD'),
+      edate: format(endDate, 'YYYY-MM-DD'),
       elems: temperatureAdjustment(station.network)
     }
 

@@ -1,6 +1,8 @@
 import {observable, action, computed} from 'mobx';
 import pestData from '../../../public/pestData.json';
 import {states, matchIconsToStations} from '../../utils';
+import {format, getYear} from 'date-fns'
+
 
 class AppStore {
 
@@ -36,30 +38,23 @@ class AppStore {
 
 // DATES -----------------------------------------------------------------------
 @observable startDate = '';
-@observable endDate = new Date();
-@action handleDayClick = (e, endDate) => {
-  this.endDate = endDate
-  const startDate = `01/01/${endDate.getFullYear()}`
-  this.startDate = startDate
+@observable endDate = ''
+@action updateEndDate = (e) => {
+  this.endDate = format(e,'MM/DD/YYYY')
+  this.startDate = `01/01/${getYear(this.endDate)}`
 }
 
 // stage -----------------------------------------------------------------------
   @observable stage = {};
-  @action updateStage = (d) => {
-    this.stage = d
-  }
+  @action updateStage = d => this.stage = d
 
 // ACISData --------------------------------------------------------------------
   @observable ACISData = [];
-  @action updateACISData = (d) => {
-    this.ACISData = d
-  }
+  @action updateACISData = d => this.ACISData = d
 
 // degreeDay -------------------------------------------------------------------
   @observable degreeDay = [];
-  @action updateDegreeDay = (d) => {
-    this.degreeDay = d
-  }
+  @action updateDegreeDay = d => this.degreeDay = d
   @computed get cumulativeDegreeDay() {
     const results = []
     this.degreeDay.reduce((prev, curr, i) => results[i] = prev + curr, 0)

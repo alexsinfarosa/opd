@@ -25,54 +25,53 @@ export const states = [
   {postalCode: 'WV', lat: 38.6409, lon: -80.6230, zoom: 7, name: 'West Virginia'},
   {postalCode: 'WI', lat: 44.6243, lon: -89.9941, zoom: 6, name: 'Wisconsin'},
   {postalCode: 'ALL', lat: 42.5000, lon: -75.7000, zoom: 6, name: 'All States'}
-];
+]
 
 export let fakeData = [
   [
     '2017-01-01',
-    ['10','10','17','18','M','M','19','21','21','21','22','25','26','27','27','27','28','28','28','29','29','29','29','29']
+    ['10', '10', '17', '18', 'M', 'M', '19', '21', '21', '21', '22', '25', '26', '27', '27', '27', '28', '28', '28', '29', '29', '29', '29', '29']
   ],
   [
     '2017-01-02',
-    ['100','5','24','25','26','26','27','27','28','28','28','28','28','28','29','29','30','31','32','32','32','32','30','M']
+    ['100', '5', '24', '25', '26', '26', '27', '27', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '32', '32', '32', '32', '30', 'M']
   ],
   [
     '2017-01-03',
-    ['80','2','24','24','26','26','27','28','28','28','28','28','28','28','29','29','30','31','33','33','33','34','35','35']
+    ['80', '2', '24', '24', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', '35', '35']
   ],
   [
     '2017-01-04',
-    ['160','4','33','22','26','26','27','28','28','28','28','28','28','28','29','29','30','31','33','33','33','34','M','M']
+    ['160', '4', '33', '22', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', 'M', 'M']
   ]
-];
+]
 
 export let sisterData = [
   [
     '2017-01-01',
-    ['11','11','17','18','100','100','19','21','21','21','22','25','26','27','27','27','28','28','28','29','29','29','29','29']
+    ['11', '11', '17', '18', '100', '100', '19', '21', '21', '21', '22', '25', '26', '27', '27', '27', '28', '28', '28', '29', '29', '29', '29', '29']
   ],
   [
     '2017-01-02',
-    ['100','5','24','25','26','26','27','27','28','28','28','28','28','28','29','29','30','31','32','32','32','32','30','M']
+    ['100', '5', '24', '25', '26', '26', '27', '27', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '32', '32', '32', '32', '30', 'M']
   ],
   [
     '2017-01-03',
-    ['80','2','24','24','26','26','27','28','28','28','28','28','28','28','29','29','30','31','33','33','33','34','35','35']
+    ['80', '2', '24', '24', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', '35', '35']
   ],
   [
     '2017-01-04',
-    ['160','4','33','22','26','26','27','28','28','28','28','28','28','28','29','29','30','31','33','33','33','34','35','32']
+    ['160', '4', '33', '22', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', '35', '32']
   ]
-];
+]
 
 export const avgString = (a, b) => {
   const aNum = parseFloat(a)
   const bNum = parseFloat(b)
-  return (Math.round((aNum+bNum)/2)).toString()
+  return (Math.round((aNum + bNum) / 2)).toString()
 }
 
 export const calculateDegreeDay = (data) => {
-
   // Creating an array only of hourly data
   const hourlyData = data.map(day => day[1])
 
@@ -80,36 +79,36 @@ export const calculateDegreeDay = (data) => {
   const hourlyDataFlat = [].concat(...hourlyData)
 
   // Replace ONLY single non consecutive 'M' values
-  const hourlyDataWithReplacedValuesFlat = hourlyDataFlat.map((val,i) => {
-      if (i === 0 && val === 'M') {
-        return hourlyDataFlat[i+1]
-      } else if (i === (hourlyDataFlat.length - 1) && val === 'M') {
-        return hourlyDataFlat[i-1]
-      } else if (val === 'M' && hourlyDataFlat[i-1] !== 'M' && hourlyDataFlat[i+1] !== 'M') {
-        return avgString(hourlyDataFlat[i-1], hourlyDataFlat[i+1])
-      } else {
-        return val
-      }
+  const hourlyDataWithReplacedValuesFlat = hourlyDataFlat.map((val, i) => {
+    if (i === 0 && val === 'M') {
+      return hourlyDataFlat[i + 1]
+    } else if (i === (hourlyDataFlat.length - 1) && val === 'M') {
+      return hourlyDataFlat[i - 1]
+    } else if (val === 'M' && hourlyDataFlat[i - 1] !== 'M' && hourlyDataFlat[i + 1] !== 'M') {
+      return avgString(hourlyDataFlat[i - 1], hourlyDataFlat[i + 1])
+    } else {
+      return val
+    }
   })
 
   // Replace multiple consecutive 'M' values
-  const hourlyDataWithReplacedValuesFromSisterStationsFlat = hourlyDataWithReplacedValuesFlat.map((val,i) => {
-      const hourlyDataSister = sisterData.map(day => day[1])
-      const hourlDataSisterflat = [].concat(...hourlyDataSister)
-      if(val === 'M' && hourlDataSisterflat[i] !== 'M') {
-        return hourlDataSisterflat[i]
-      } else if (val === 'M' && hourlDataSisterflat[i] === 'M') {
+  const hourlyDataWithReplacedValuesFromSisterStationsFlat = hourlyDataWithReplacedValuesFlat.map((val, i) => {
+    const hourlyDataSister = sisterData.map(day => day[1])
+    const hourlDataSisterflat = [].concat(...hourlyDataSister)
+    if (val === 'M' && hourlDataSisterflat[i] !== 'M') {
+      return hourlDataSisterflat[i]
+    } else if (val === 'M' && hourlDataSisterflat[i] === 'M') {
         // Return forecast values
-        return '0'
-      } else {
-        return val
-      }
+      return '0'
+    } else {
+      return val
+    }
   })
 
   // Unflatten the hourly data arry with all 'M' values replaced
   const hourlyDataWithReplacedValues = []
-  while(hourlyDataWithReplacedValuesFromSisterStationsFlat.length > 0) {
-    hourlyDataWithReplacedValues.push(hourlyDataWithReplacedValuesFromSisterStationsFlat.splice(0,24))
+  while (hourlyDataWithReplacedValuesFromSisterStationsFlat.length > 0) {
+    hourlyDataWithReplacedValues.push(hourlyDataWithReplacedValuesFromSisterStationsFlat.splice(0, 24))
   }
 
   // console.table(hourlyDataWithReplacedValues)
@@ -117,13 +116,12 @@ export const calculateDegreeDay = (data) => {
   // Start creating variables to compute degree days
   const min = hourlyDataWithReplacedValues.map(day => Math.min(...day))
   const max = hourlyDataWithReplacedValues.map(day => Math.max(...day))
-  const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
+  const avg = min.map((val, i) => (Math.round((val + max[i]) / 2)))
   const base = 50
-  const degreeDay = avg.map(val => val-base > 0 ? val-base : 0)
+  const degreeDay = avg.map(val => val - base > 0 ? val - base : 0)
   console.log(`Min: ${min} Max: ${max} Avg: ${avg} Degree day: ${degreeDay}`)
   return degreeDay
 }
-
 
 export const calculateCumulativeDegreeDay = (degreeDayData) => {
   const tempArr = []
@@ -145,9 +143,9 @@ export const temperatureAdjustment = (network) => {
 
 // Handling Michigan state network
 export const michiganAdjustment = (station) => {
-  if (station.state === 'MI' && station.network === 'miwx' && station.id.slice(0,3) === 'ew_') {
+  if (station.state === 'MI' && station.network === 'miwx' && station.id.slice(0, 3) === 'ew_') {
     // example: ew_ITH
-    return station.id.slice(3,6)
+    return station.id.slice(3, 6)
   }
   return station.id
 }
@@ -167,20 +165,20 @@ export const matchIconsToStations = (stations, state) => {
   const culogGray = 'http://newa.nrcc.cornell.edu/gifs/culogGray.png'
 
   stations.forEach(station => {
-    if (station.network === "newa" || station.network === "njwx" || station.network === "miwx" || (station.network === "cu_log" && station.state !== "NY")) {
+    if (station.network === 'newa' || station.network === 'njwx' || station.network === 'miwx' || (station.network === 'cu_log' && station.state !== 'NY')) {
       const newObj = station
-      station.state === state.postalCode || state.postalCode === "ALL" ? newObj['icon'] = newa : newObj['icon'] = newaGray;
+      station.state === state.postalCode || state.postalCode === 'ALL' ? newObj['icon'] = newa : newObj['icon'] = newaGray
       results.push(newObj)
-    } else if (station.network === "cu_log") {
+    } else if (station.network === 'cu_log') {
       const newObj = station
-      station.state === state.postalCode || state.postalCode === "ALL" ? newObj['icon'] = culog : newObj['icon'] = culogGray
+      station.state === state.postalCode || state.postalCode === 'ALL' ? newObj['icon'] = culog : newObj['icon'] = culogGray
       newObj['icon'] = culog
       results.push(newObj)
-    } else if (station.network === "icao") {
+    } else if (station.network === 'icao') {
       const newObj = station
-      station.state === state.postalCode || state.postalCode === "ALL" ? newObj['icon'] = airport : newObj['icon'] = airportGray
+      station.state === state.postalCode || state.postalCode === 'ALL' ? newObj['icon'] = airport : newObj['icon'] = airportGray
       results.push(newObj)
     }
   })
   return results
-};
+}

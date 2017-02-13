@@ -1,80 +1,58 @@
-
 import React, {Component} from 'react';
 import { action } from 'mobx';
 import {inject, observer} from 'mobx-react';
-import GoogleMapReact from 'google-map-react';
-import Marker from './Marker';
 import {states} from '../../utils';
+import { Map, TileLayer, Marker } from 'react-leaflet'
+import L from 'leaflet'
+import './index.css'
+
+const myIcon = (e) => L.icon({
+  iconUrl: e
+})
 
 @inject('store') @observer
-class MapView extends Component {
-
-  @action onChange = ({center, zoom}) => {
-      // console.log(`Lat: ${center.lat}, Lon: ${center.lng}, Zoom: ${zoom}`)
-  }
-
-  defineMapOptions(maps) {
-    return {
-      zoomControlOptions: {
-        position: maps.ControlPosition.RIGHT_BUTTOM,
-        style: maps.ZoomControlStyle.SMALL
-      },
-      mapTypeControlOptions: {
-        position: maps.ControlPosition.TOP_RIGHT
-      },
-      mapTypeControl: true
-    }
-  }
+export default class MapView extends Component {
 
   @action onClickSetStation = (e) => {
-    const id = e.split(" ")[0]
-    const network = e.split(" ")[1]
-    const selectedState = e.split(" ")[2]
-
-    const {stations} = this.props.store.app
-    const selectedStation = stations.filter(station => (station.id === id && station.network === network))
-    if (selectedState === this.props.store.app.state.postalCode) {
-      this.props.store.app.station = selectedStation[0]
+    const {lat, lng} = e.latlng
+    const {stations, state} = this.props.store.app
+    const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
+    if (selectedStation.state === state.postalCode) {
+      this.props.store.app.station = selectedStation
     } else {
-      // console.log(states.filter(state => state.postalCode === selectedState)[0].name)
-      const outOfState = states.filter(state => state.postalCode === selectedState)
-      alert(`Select ${outOfState[0].name} from the State menu to access this station.`)
+      const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
+      const state = states.filter(state => state.postalCode === selectedStation.state)[0]
+      alert(`Select ${state.name} from the State menu to access this station.`)
     }
   }
 
   render() {
-    const {filteredStations, state} = this.props.store.app;
+    // const position = [this.state.lat, this.state.lng];
+    const {filteredStations, state} = this.props.store.app
     const MarkerList = filteredStations.map( station => (
       <Marker
-        key={`${station.id} ${station.network} ${station.state}`}
-        network={station.network}
-        lat={station.lat}
-        lng={station.lon}
-        postalCode={station.state}
-        src={station.icon}
-        alt={station.name}
-      />
+        key={`${station.id} ${station.network}`}
+        // network={station.network}
+        position={[station.lat,station.lon]}
+        // postalCode={station.state}
+        icon={myIcon(station.icon)}
+        title={station.name}
+        onClick={this.onClickSetStation}
+        >
+      </Marker>
     ))
 
     return (
-      <div style={{width: '100%', height: '540px'}}>
-        <GoogleMapReact
-          bootstrapURLKeys={{
-            key: 'AIzaSyAftetOMxP8ksyB5AW_CLWvDZG7nKmcIrI',
-            language: 'en'
-          }}
-          onChange={this.onChange}
-          onChildClick={this.onClickSetStation}
-          center={ state ? [state.lat, state.lon] : {lat: 42.9543, lng: -75.5262}}
-          zoom={state ? state.zoom : 6}
-          options={this.defineMapOptions}
-          hoverDistance={20}>
-
-          {MarkerList}
-        </GoogleMapReact>
-      </div>
+      <Map
+        ref='map'
+        center={Object.keys(state).length === 0 ? [42.9543,-75.5262] : [state.lat,state.lon]}
+        zoom={Object.keys(state).length === 0 ? 6 : state.zoom}>
+      <TileLayer
+        attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+      />
+      {MarkerList}
+      </Map>
     )
   }
 }
-
-export default MapView;

@@ -15,9 +15,9 @@
   border-radius: 5px;
 }
 
-*:focus{
+/**:focus{
     background-color: #00D1B2;
     outline:none;
     border:none;
     box-shadow:none;
-}
+}*/

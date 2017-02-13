@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
 // import mobx, {action} from 'mobx';
 
-@inject('store') @observer
+@inject("store")
+@observer
 class Graph extends Component {
   render() {
-    return (
-      <div></div>
-    )
+    return <div />;
   }
 }
 
-export default Graph
+export default Graph;
