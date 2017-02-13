@@ -56,7 +56,7 @@ class SelectionPanel extends Component {
     const {pest, station} = this.props.store.app
     const hourlyDataFlat = reduceArrayToOneDimension(data)
 
-    console.log(`Missing values: ${hourlyDataFlat.filter(m => m === 'M').length}`)
+    console.info(`ALL Missing values: ${hourlyDataFlat.filter(m => m === 'M').length}`)
 
     // Replace ONLY single non consecutive 'M' values
     let hourlyDataWithReplacedValuesFlat = hourlyDataFlat.map((val,i) => {
@@ -65,19 +65,20 @@ class SelectionPanel extends Component {
       } else if (i === (hourlyDataFlat.length - 1) && val === 'M') {
         return hourlyDataFlat[i-1]
       } else if (val === 'M' && hourlyDataFlat[i-1] !== 'M' && hourlyDataFlat[i+1] !== 'M') {
-        // console.log(i)
-        // console.log(hourlyDataFlat[i-1], hourlyDataFlat[i], hourlyDataFlat[i+1])
+        console.log(i)
+        console.log(hourlyDataFlat[i-1], hourlyDataFlat[i], hourlyDataFlat[i+1])
         return avgString(hourlyDataFlat[i-1], hourlyDataFlat[i+1])
       } else {
         return val
       }
     })
 
-    // Replace consecutive M's values from sister station
+    // Replace consecutive M's values with values from sister station
     const missingValues = hourlyDataWithReplacedValuesFlat.filter(e => e === 'M')
+    console.info(`ONLY consecutive M values: ${missingValues.length}`)
     if(missingValues.length > 0) {
       const idAndNetwork = this.requestSisterStation(station.id, station.network)
-      // console.log(idAndNetwork)
+      console.log(idAndNetwork)
       const id = idAndNetwork[0]
       const network = idAndNetwork[1]
       hourlyDataWithReplacedValuesFlat = this.requestSisterData(hourlyDataWithReplacedValuesFlat, id, network)
@@ -89,7 +90,7 @@ class SelectionPanel extends Component {
         hourlyDataWithReplacedValues.push(hourlyDataWithReplacedValuesFlat.splice(0,24))
     }
 
-    // console.table(hourlyDataWithReplacedValues)
+    console.table(hourlyDataWithReplacedValues)
 
     // Start creating variables to compute degree days
     const min = hourlyDataWithReplacedValues.map(day => Math.min(...day))
@@ -97,10 +98,10 @@ class SelectionPanel extends Component {
     const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
     const base = pest.baseTemp
     const dd = avg.map(val => val-base > 0 ? val-base : 0)
-    console.log(`Min: ${min}`)
-    console.log(`Max: ${max}`)
-    console.log(`Avg: ${avg}`)
-    console.log(`DD: ${dd}`)
+    console.info(`Min: ${min}`)
+    console.info(`Max: ${max}`)
+    console.info(`Avg: ${avg}`)
+    console.info(`DD: ${dd}`)
     this.props.store.app.updateDegreeDay(dd)
   }
 
@@ -115,13 +116,13 @@ class SelectionPanel extends Component {
   }
 
   requestSisterData = (currentStationData, id, network) => {
-    const {endDate} = this.props.store.app
+    const {startDate, endDate} = this.props.store.app
 
     // Creating the object for the POST request
     const params = {
       sid: `${id} ${network}`,
-      sdate: `${endDate.getFullYear()}-01-01`,
-      edate: endDate.toISOString().split('T')[0],
+      sdate: format(startDate, 'YYYY-MM-DD'),
+      edate: format(endDate, 'YYYY-MM-DD'),
       elems: temperatureAdjustment(network)
     }
 

@@ -1,3 +1,6 @@
+import {format} from 'date-fns'
+
+
 export const states = [
   {postalCode: 'AL', lat: 32.6174, lon: -86.6795, zoom: 7, name: 'Alabama'},
   {postalCode: 'CT', lat: 41.6220, lon: -72.7272, zoom: 8, name: 'Connecticut'},
@@ -181,4 +184,15 @@ export const matchIconsToStations = (stations, state) => {
     }
   })
   return results
+}
+
+export const toDisplayCumulativeDegreeDay = (data2, fakeData) => {
+  const tempArr = []
+  data2.forEach((e,i) => {
+    const newObj = {}
+    newObj['Date'] = format(fakeData[i][0], 'MMM D')
+    newObj['Accumulated Degree-Days'] = e
+    tempArr.push(newObj)
+  })
+  return tempArr
 }
