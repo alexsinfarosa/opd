@@ -60,6 +60,11 @@ class AppStore {
     this.degreeDay.reduce((prev, curr, i) => results[i] = prev + curr, 0)
     return results
   }
+
+// ActiveLinks -------------------------------------------------------------------
+  @observable path = ''
+  @action updatePath = d => this.path = d
+
 }
 
 export default AppStore;

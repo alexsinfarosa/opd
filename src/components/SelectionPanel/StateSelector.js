@@ -10,6 +10,7 @@ class StateSelector extends Component {
   submitToMap = (e) => {
     this.props.store.app.updateState(e)
     this.props.store.app.updateFilteredStations()
+    // this.props.store.app.updatePath('/map')
     this.props.store.router.goTo(views.map)
   }
 

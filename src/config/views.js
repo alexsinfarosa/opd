@@ -10,7 +10,10 @@ const views = {
   map: new Route({
     id: 'map',
     path: '/map',
-    component: <Map />
+    component: <Map />,
+    beforeEnter: (route, params, store) => {
+      store.app.updatePath(route.path)
+    }
   }),
   results: new Route({
     id: 'results',
@@ -18,6 +21,7 @@ const views = {
     component: <Results />,
     beforeEnter: (route, param, store) => {
       const {pest, state, station} = store.app
+      store.app.updatePath(route.path)
       const isPest = Object.keys(pest).length === 0
       const isState = Object.keys(state).length === 0
       const isStation = Object.keys(station).length === 0
@@ -26,14 +30,15 @@ const views = {
         alert(`Please make sure all fields on the left panel are selected`)
         return false
       }
-    },
-    onEnter: () => {
     }
   }),
   moreinfo: new Route({
     id: 'moreinfo',
     path: '/moreinfo',
-    component: <MoreInfo />
+    component: <MoreInfo />,
+    beforeEnter: (route, params, store) => {
+      store.app.updatePath(route.path)
+    }
   })
 }
 
