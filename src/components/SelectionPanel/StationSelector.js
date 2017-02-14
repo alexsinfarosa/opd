@@ -19,8 +19,9 @@ class StationSelector extends Component {
             <select
               value={station.name}
               onChange={this.props.store.app.updateStation}
+              defaultValue="Select Station"
             >
-              <option>Select Station</option>
+              <option disabled="disabled">Select Station</option>
               {stationList}
             </select>
           </span>

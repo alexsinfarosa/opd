@@ -17,8 +17,9 @@ class PestSelector extends Component {
             <select
               value={pest.informalName}
               onChange={this.props.store.app.setPest}
+              defaultValue="Select Pest"
             >
-              <option>Select Pest</option>
+              <option disabled="disabled">Select Pest</option>
               {pestList}
             </select>
           </span>

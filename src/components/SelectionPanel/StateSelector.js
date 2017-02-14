@@ -25,8 +25,9 @@ class StateSelector extends Component {
             <select
               value={this.props.store.app.state.name}
               onChange={this.submitToMap}
+              defaultValue="Select State"
             >
-              <option>Select State</option>
+              <option disabled="disabled">Select State</option>
               {stateList}
             </select>
           </span>

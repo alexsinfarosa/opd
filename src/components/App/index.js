@@ -37,7 +37,9 @@ class AppComponent extends Component {
     .then(res => {
       const stations = res.data.stations
       this.props.store.app.stations = stations
-      this.getLocalStorage()
+      if(localStorage.getItem('state' && 'station')) {
+        this.getLocalStorage()
+      }
     })
     .catch(err => {
       console.log(err)

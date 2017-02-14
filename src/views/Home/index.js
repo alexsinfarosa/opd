@@ -40,7 +40,6 @@ class HomeView extends Component {
 
           {/* VIEWS */}
           <MobxRouter />
-          {/* {router.currentView && router.currentView.component} */}
 
         </div>
       </div>

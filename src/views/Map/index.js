@@ -29,7 +29,6 @@ export default class MapView extends Component {
   render() {
     // const position = [this.state.lat, this.state.lng];
     const {filteredStations, state} = this.props.store.app
-    console.log(filteredStations.length)
     const MarkerList = filteredStations.map( station => (
       <Marker
         key={`${station.id} ${station.network}`}

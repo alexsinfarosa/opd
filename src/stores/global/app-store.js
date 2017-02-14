@@ -61,7 +61,7 @@ class AppStore {
   }
 
 // ActiveLinks -------------------------------------------------------------------
-  @observable path = null
+  @observable path = '/'
   @action updatePath = d => this.path = d
 
 // MIX -------------------------------------------------------------------
