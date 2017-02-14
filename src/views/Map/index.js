@@ -18,7 +18,7 @@ export default class MapView extends Component {
     const {stations, state} = this.props.store.app
     const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
     if (selectedStation.state === state.postalCode) {
-      this.props.store.app.station = selectedStation
+      this.props.store.app.updateStation(selectedStation)
     } else {
       const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
       const state = states.filter(state => state.postalCode === selectedStation.state)[0]
@@ -29,6 +29,7 @@ export default class MapView extends Component {
   render() {
     // const position = [this.state.lat, this.state.lng];
     const {filteredStations, state} = this.props.store.app
+    console.log(filteredStations.length)
     const MarkerList = filteredStations.map( station => (
       <Marker
         key={`${station.id} ${station.network}`}

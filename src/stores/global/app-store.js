@@ -10,15 +10,14 @@ class AppStore {
   @observable pests = pestData;
   @observable pest = {};
   @action setPest = (e) => {
-    const selectedPest = this.pests.filter(pest => pest.informalName === e.target.value)[0]
-    this.pest = selectedPest
+    this.pest = this.pests.filter(pest => pest.informalName === e.target.value)[0]
   }
 
 // state -----------------------------------------------------------------------
   @observable state = {};
   @action updateState = (e) => {
-    const selectedState = states.filter(state => state.name === e.target.value)[0]
-    this.state = selectedState
+    this.state = states.filter(state => state.name === e.target.value)[0]
+    localStorage.setItem('state', JSON.stringify(this.state))
   }
 
 // stations --------------------------------------------------------------------
@@ -32,8 +31,8 @@ class AppStore {
   }
   @observable station = {};
   @action updateStation = (e) => {
-    const selectedStation = this.stations.filter(station => station.name === e.target.value)[0]
-    this.station = selectedStation
+    this.station = this.stations.filter(station => station.name === e.target.value)[0]
+    localStorage.setItem('station', JSON.stringify(this.station))
   }
 
 // DATES -----------------------------------------------------------------------
@@ -62,9 +61,13 @@ class AppStore {
   }
 
 // ActiveLinks -------------------------------------------------------------------
-  @observable path = ''
+  @observable path = null
   @action updatePath = d => this.path = d
 
+// MIX -------------------------------------------------------------------
+  @computed get getAllRequiredFields() {
+    return Object.keys(this.pest && this.state && this.station && this.endDate).length === 0
+  }
 }
 
 export default AppStore;

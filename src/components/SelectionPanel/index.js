@@ -166,6 +166,7 @@ class SelectionPanel extends Component {
   }
 
   render() {
+    const {getAllRequiredFields} = this.props.store.app
     return (
       <div className='tile is-parent is-4'>
         <div className='tile is-child box'>
@@ -177,7 +178,7 @@ class SelectionPanel extends Component {
           <br/>
           <DateSelector />
           <br/>
-          <button className="button is-primary"
+          <button className={`button is-primary ${getAllRequiredFields ? 'is-disabled' : null}`}
             onClick={this.getACISdata}
             >
               Calculate

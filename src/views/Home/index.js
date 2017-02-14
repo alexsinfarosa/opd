@@ -11,7 +11,6 @@ class HomeView extends Component {
   render() {
     const {store} = this.props;
     const {path} = this.props.store.app
-    console.log(path)
     // const {store:{router}} = this.props;
     return (
       <div className='tile is-parent'>
@@ -21,18 +20,17 @@ class HomeView extends Component {
 
           <div className="tabs is-boxed">
             <ul>
-              {/* TODO: Style the Links */}
-              <li className={path === '/map' ? 'is-active' : 'null'}>
+              <li className={path === '/map' ? 'is-active' : null}>
                 <Link view={views.map} store={store}>
                   <span>Map</span>
                 </Link>
               </li>
-              <li className={path === '/results' ? 'is-active' : 'null'}>
+              <li className={path === '/results' ? 'is-active' : null}>
                 <Link view={views.results} store={store}>
                   <span>Results</span>
                 </Link>
               </li>
-              <li className={path === '/moreinfo' ? 'is-active' : 'null'}>
+              <li className={path === '/moreinfo' ? 'is-active' : null}>
                 <Link view={views.moreinfo} store={store}>
                   <span>More Info</span>
                 </Link>
@@ -41,7 +39,6 @@ class HomeView extends Component {
           </div>
 
           {/* VIEWS */}
-
           <MobxRouter />
           {/* {router.currentView && router.currentView.component} */}
 

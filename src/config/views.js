@@ -10,10 +10,7 @@ const views = {
   map: new Route({
     id: 'map',
     path: '/map',
-    component: <Map />,
-    beforeEnter: (route, params, store) => {
-      store.app.updatePath(route.path)
-    }
+    component: <Map />
   }),
   results: new Route({
     id: 'results',
@@ -21,7 +18,6 @@ const views = {
     component: <Results />,
     beforeEnter: (route, param, store) => {
       const {pest, state, station} = store.app
-      store.app.updatePath(route.path)
       const isPest = Object.keys(pest).length === 0
       const isState = Object.keys(state).length === 0
       const isStation = Object.keys(station).length === 0
@@ -35,10 +31,7 @@ const views = {
   moreinfo: new Route({
     id: 'moreinfo',
     path: '/moreinfo',
-    component: <MoreInfo />,
-    beforeEnter: (route, params, store) => {
-      store.app.updatePath(route.path)
-    }
+    component: <MoreInfo />
   })
 }
 

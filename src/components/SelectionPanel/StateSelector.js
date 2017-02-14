@@ -10,7 +10,6 @@ class StateSelector extends Component {
   submitToMap = (e) => {
     this.props.store.app.updateState(e)
     this.props.store.app.updateFilteredStations()
-    // this.props.store.app.updatePath('/map')
     this.props.store.router.goTo(views.map)
   }
 
@@ -18,7 +17,6 @@ class StateSelector extends Component {
     // console.log(mobx.toJS(this.props.store.app.state))
     const stateList = states.map(state =>
       <option key={state.postalCode}>{state.name}</option>)
-
     return (
       <div>
         <label className="label">Select a State:</label>

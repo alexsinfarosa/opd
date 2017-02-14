@@ -9,7 +9,6 @@ class PestSelector extends Component {
     // console.log(mobx.toJS(this.props.store.app.pest))
     const {pests, pest} = this.props.store.app;
     const pestList = pests.map(pest => <option key={pest.id}>{pest.informalName}</option>)
-
     return (
       <div>
         <label className="label">Select a Pest:</label>

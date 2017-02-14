@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
 import {action, when} from 'mobx';
 import axios from 'axios';
+import views from 'config/views';
 import './App.css';
 
 import AppHeader from '../AppHeader'
@@ -24,12 +25,19 @@ class AppComponent extends Component {
     )
   }
 
+  getLocalStorage = () => {
+    this.props.store.app.state = JSON.parse(localStorage.getItem('state'))
+    this.props.store.app.station = JSON.parse(localStorage.getItem('station'))
+    this.props.store.app.updateFilteredStations()
+    this.props.store.router.goTo(views.map)
+  }
+
   @action fetchStations = () => {
     axios.get('http://newa.nrcc.cornell.edu/newaUtil/stateStationList/all')
     .then(res => {
       const stations = res.data.stations
       this.props.store.app.stations = stations
-      // console.log('Fetch method fired')
+      this.getLocalStorage()
     })
     .catch(err => {
       console.log(err)
