@@ -3,9 +3,9 @@ import {inject, observer} from 'mobx-react'
 import { action, computed } from 'mobx';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
-import newaPic from './newa_logo.jpg'
-import pmepPic from './pmep_logo.jpg'
-import acisPic from './PoweredbyACIS_NRCC.jpg'
+import newaPic from './images/newa_logo.jpg'
+import pmepPic from './images/pmep_logo.jpg'
+import acisPic from './images/PoweredbyACIS_NRCC.jpg'
 import {format} from 'date-fns'
 
 import CustomLabel from './CustomLabel'
@@ -14,7 +14,7 @@ import {toDisplayCumulativeDegreeDay} from '../../utils'
 import './Results.css'
 
 @inject('store') @observer
-class ResultsView extends Component {
+export default class Results extends Component {
 
   @action setStage = (e) => {
     const { pest } = this.props.store.app
@@ -214,5 +214,3 @@ class ResultsView extends Component {
   )
   }
 }
-
-export default ResultsView;

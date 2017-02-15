@@ -4,14 +4,14 @@ import {inject, observer} from 'mobx-react';
 import {states} from '../../utils';
 import { Map, TileLayer, Marker } from 'react-leaflet'
 import L from 'leaflet'
-import './index.css'
+import './theMap.css'
 
 const myIcon = (e) => L.icon({
   iconUrl: e
 })
 
 @inject('store') @observer
-export default class MapView extends Component {
+export default class TheMap extends Component {
 
   @action onClickSetStation = (e) => {
     const {lat, lng} = e.latlng

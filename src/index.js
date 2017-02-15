@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 //components
-import App from 'components/App';
+import App from 'components/App/App.js';
 
 //style
 // import 'styles/css/index.css';

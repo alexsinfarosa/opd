@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
 
 @inject('store') @observer
-class MoreInfoView extends Component {
+export default class MoreInfo extends Component {
 
   render() {
     return (
@@ -41,5 +41,3 @@ class MoreInfoView extends Component {
     )
   }
 }
-
-export default MoreInfoView;

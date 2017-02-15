@@ -1,6 +1,5 @@
 import {format} from 'date-fns'
 
-
 export const states = [
   {postalCode: 'AL', lat: 32.6174, lon: -86.6795, zoom: 7, name: 'Alabama'},
   {postalCode: 'CT', lat: 41.6220, lon: -72.7272, zoom: 8, name: 'Connecticut'},

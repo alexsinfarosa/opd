@@ -2,15 +2,21 @@ import React from 'react'
 import {Route} from 'mobx-router'
 
 // components
-import Map from 'views/Map'
-import Results from 'views/Results'
-import MoreInfo from 'views/MoreInfo'
+import Home from '../views/Home/Home'
+import TheMap from '../views/Map/TheMap'
+import Results from '../views/Results/Results'
+import MoreInfo from '../views/MoreInfo/MoreInfo.js'
 
 const views = {
+  home: new Route({
+    id: 'home',
+    path: '/',
+    component: <Home />
+  }),
   map: new Route({
     id: 'map',
     path: '/map',
-    component: <Map />
+    component: <TheMap />
   }),
   results: new Route({
     id: 'results',
