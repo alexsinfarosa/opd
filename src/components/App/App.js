@@ -81,11 +81,11 @@ class AppComponent extends Component {
             {/* BODY */}
             <div className="columns">
               {/* LEFT */}
-              <div className="column is-3">
+              <div className="column is-one-third">
                 <SelectionPanel />
               </div>
               {/* RIGHT */}
-              <div className="column is-9">
+              <div className="column">
 
                   <div className='box hasFixedHeight'>
 

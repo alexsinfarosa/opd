@@ -5,13 +5,6 @@ import {format, getYear} from 'date-fns'
 
 
 class AppStore {
-// TESTING----------------------------------------------------------------------
-@observable Tstations = [];
-@observable Tstation = {};
-@action updateTstation = (e) => {
-  this.Tstation = this.Tstations.filter(station => station.name === e.target.value)[0]
-}
-
 // pest ------------------------------------------------------------------------
   @observable pests = pestData;
   @observable pest = {};
@@ -37,7 +30,7 @@ class AppStore {
   }
   @observable station = {};
   @action updateStation = (e) => {
-    this.station = this.stations.filter(station => station.name === e.target.value)[0]
+    this.station = this.stations.filter(station => station.name === e.name)[0]
     localStorage.setItem('station', JSON.stringify(this.station))
   }
 

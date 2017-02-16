@@ -19,7 +19,7 @@ export default class ResultsTable extends Component {
               <YAxis/>
               <Tooltip/>
               <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-              <Line type="monotone" dataKey="Accumulated Degree-Days" dot={false} stroke="#8884d8" activeDot={{r: 6}}/>
+              <Line type="monotone" dataKey="Accumulated Degree-Days" dot={false} stroke="#3273DC" activeDot={{r: 6}}/>
               {/* <Line type="monotone" dataKey="pv" stroke="#82ca9d" /> */}
             </LineChart>
           </ResponsiveContainer>
