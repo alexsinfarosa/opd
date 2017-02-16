@@ -101,6 +101,7 @@ class SelectionPanel extends Component {
                 const sisterStationHourlyDataFlat = flattenArray(res.data.data)
                 console.log('from sister')
                 console.log(sisterStationHourlyDataFlat)
+                console.log(sisterStationHourlyDataFlat.filter(e=>e==='M').length)
                 console.log('replaced')
 
                 hourlyDataWithReplacedValuesFlat = replaceConsecutiveMissingValues(sisterStationHourlyDataFlat, hourlyDataWithReplacedValuesFlat)

@@ -108,7 +108,11 @@ export const replaceConsecutiveMissingValues = (sisterStation, currentStation) =
   const arr = []
   currentStation.forEach((e, i) => {
     if(e === 'M') {
-      arr.push(sisterStation[i])
+      if(sisterStation[i] !== 'M') {
+        arr.push(sisterStation[i])
+      } else {
+        arr.push('60') // ------>  FORECAST OPTION 
+      }
     } else {
       arr.push(e)
     }
