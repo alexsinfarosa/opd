@@ -1,216 +1,86 @@
 import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react'
-import { action, computed } from 'mobx';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts';
 
+// Images
 import newaPic from './images/newa_logo.jpg'
 import pmepPic from './images/pmep_logo.jpg'
 import acisPic from './images/PoweredbyACIS_NRCC.jpg'
-import {format} from 'date-fns'
 
-import CustomLabel from './CustomLabel'
-import {toDisplayCumulativeDegreeDay} from '../../utils'
+// Components
+import ResultsHeader from './ResultsHeader'
+import ResultsTable from './ResultsTable'
+import ResultsGraph from './ResultsGraph'
+import ResultsStage from './ResultsStage'
 
+// style
 import './Results.css'
 
 @inject('store') @observer
 export default class Results extends Component {
-
-  @action setStage = (e) => {
-    const { pest } = this.props.store.app
-    const selectedStage = pest.preBiofix.filter(stage => stage.stage === e.target.value)[0]
-    this.props.store.app.stage = selectedStage
-  }
-
-  @computed get getStageList() {
-    const { pest } = this.props.store.app
-    if (Object.keys(pest).length !== 0) {
-      return pest.preBiofix.map(stage =>
-        <option key={stage.id}>{stage.stage}</option>)
-    }
-  }
-
   render () {
-  const { pest, degreeDay, station, startDate, endDate, stage, ACISData, cumulativeDegreeDay } = this.props.store.app
-  // console.log(degreeDay.slice(), cumulativeDegreeDay.slice(), mobx.toJS(stage))
-  return (
-    <section className="hero">
-      <div className="hero-body">
-        <div className="container has-text-centered">
+    return (
+      <section className="hero">
+        <div className="hero-body">
+          <div className="container has-text-centered">
 
-          {/* HEADER */}
+            {/* HEADER */}
+            <ResultsHeader />
 
-          <div className="columns">
-            <div className="column has-text-centered">
-              <h1 className="title is-4">
-                {pest.informalName} Results for {station.name}
-              </h1>
-              <h2 className="subtitle is-6">
-                Accumulated Degree Days (<strong>{pest.baseTemp}°F</strong>) <strong>{startDate}</strong> through <strong>{endDate}</strong>: <strong>{cumulativeDegreeDay[cumulativeDegreeDay.length - 1]}</strong> (0 days missing)
-              </h2>
+            <br/>
+
+            {/* DATA */}
+            <ResultsTable />
+
+            {/* GRAPH */}
+            <ResultsGraph />
+
+            <br/>
+
+            {/* DETAILS STAGE */}
+            <ResultsStage />
+
+
+            {/* DISCLAIMER */}
+            <div className="columns">
+              <div className="column has-text-centered">
+                <p><small><strong>Disclaimer: These are theoretical predictions and forecasts</strong>. The theoretical models predicting pest development or disease risk use the weather data collected (or forecasted) from the weather station location. These results should not be substituted for actual observations of plant growth stage, pest presence, and disease occurrence determined through scouting or insect pheromone traps.</small></p>
+              </div>
             </div>
-          </div>
 
-          <br/>
 
-          {/* DATA */}
+            {/* IMAGES */}
+            <div className="hero-foot">
+              <div className="columns">
 
-          <div className="columns">
-            <div className="column has-text-centered">
-              <table className="table is-bordered is-striped is-narrow">
-                <thead className="t-header">
-                  <tr>
-                    <th></th>
-                    <th className="before">Past</th>
-                    <th className="before">Past</th>
-                    <th className="before">Current</th>
-                    <th className="after"></th>
-                    <th className="after"></th>
-                    <th className="after">Ensuing 5 Days</th>
-                    <th className="after"></th>
-                    <th className="after"></th>
-                  </tr>
-                  <tr>
-                    <th></th>
-                    <th className="before">{!ACISData ? '' : format(ACISData[ACISData.length - 3][0], 'MMM D')}</th>
-                    <th className="before">{!ACISData ? '' : format(ACISData[ACISData.length - 2][0], 'MMM D')}</th>
-                    <th className="before">{!ACISData ? '' : format(ACISData[ACISData.length - 1][0], 'MMM D')}</th>
-                    <th className="after">-</th>
-                    <th className="after">-</th>
-                    <th className="after">-</th>
-                    <th className="after">-</th>
-                    <th className="after">-</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>Daily Degree Days (Base {pest.baseTemp}BE)</th>
-                    <td>{degreeDay[degreeDay.length - 3]}</td>
-                    <td>{degreeDay[degreeDay.length - 2]}</td>
-                    <td>{degreeDay[degreeDay.length - 1]}</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Accumulation since January 1st</th>
-                    <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 3]}</td>
-                    <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 2]}</td>
-                    <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 1]}</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                  </tr>
-                </tbody>
-              </table>
+                <div className="column is-one-third">
+                  <figure className="image is-64x64 center-image">
+                    <a href="http://newa.cornell.edu/">
+                      <img src={newaPic} alt="newa"/>
+                    </a>
+                  </figure>
+
+                </div>
+                <div className="column is-one-third">
+                  <figure className="image is-64x64 center-image">
+                    <a href="http://treefruitipm.info/">
+                      <img src={pmepPic} alt="pmep"/>
+                    </a>
+                  </figure>
+                </div>
+                <div className="column is-one-third">
+                  <figure className="image is-64x64 center-image">
+                    <a href="http://www.rcc-acis.org/">
+                      <img src={acisPic} alt="acis"/>
+                    </a>
+                  </figure>
+                </div>
+
+              </div>
             </div>
+
           </div>
-
-          {/* GRAPH */}
-
-          <div className="columns">
-            <div className="column has-text-centered">
-              <div className="title is-5">Accumulated Degree-Days</div>
-              <ResponsiveContainer width={700} height="85%">
-                <LineChart data={toDisplayCumulativeDegreeDay(cumulativeDegreeDay, ACISData)}>
-                  <XAxis dataKey="Date" tick={<CustomLabel />}/>
-                  <YAxis/>
-                  <Tooltip/>
-                  <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                  <Line type="monotone" dataKey="Accumulated Degree-Days" dot={false} stroke="#8884d8" activeDot={{r: 6}}/>
-                  {/* <Line type="monotone" dataKey="pv" stroke="#82ca9d" /> */}
-                </LineChart>
-              </ResponsiveContainer>
-
-            </div>
-          </div>
-
-          <br/>
-
-          {/* DETAILS */}
-
-          <div className="columns">
-            <div className="column has-text-centered">
-              <span className="select">
-                <select
-                  onChange={this.setStage}
-                  value={stage ? stage.stage : ''}
-                >
-                  <option>Select a stage</option>
-                  {this.getStageList}
-                </select>
-              </span>
-              <p><small>Change the pest stage above and the model will recalculate recommendations.</small></p>
-            </div>
-          </div>
-
-          <div className="columns">
-            <div className="column has-text-centered">
-              <table className="table is-bordered is-striped">
-                <thead>
-                  <tr>
-                    <th>Pest Status</th>
-                    <th>Pest Management</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{stage ? stage.management : ''}</td>
-                    <td>{stage ? stage.status : ''}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-
-
-          {/* DISCLAIMER */}
-
-          <div className="columns">
-            <div className="column has-text-centered">
-              <p><small><strong>Disclaimer: These are theoretical predictions and forecasts</strong>. The theoretical models predicting pest development or disease risk use the weather data collected (or forecasted) from the weather station location. These results should not be substituted for actual observations of plant growth stage, pest presence, and disease occurrence determined through scouting or insect pheromone traps.</small></p>
-            </div>
-          </div>
-
         </div>
-      </div>
-
-      {/* IMAGES */}
-      <div className="hero-foot">
-        <div className="columns">
-
-          <div className="column is-one-third">
-            <figure className="image is-64x64 center-image">
-              <a href="http://newa.cornell.edu/">
-                <img src={newaPic} alt="newa"/>
-              </a>
-            </figure>
-
-          </div>
-          <div className="column is-one-third">
-            <figure className="image is-64x64 center-image">
-              <a href="http://treefruitipm.info/">
-                <img src={pmepPic} alt="pmep"/>
-              </a>
-            </figure>
-          </div>
-          <div className="column is-one-third">
-            <figure className="image is-64x64 center-image">
-              <a href="http://www.rcc-acis.org/">
-                <img src={acisPic} alt="acis"/>
-              </a>
-            </figure>
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-  )
+      </section>
+    )
   }
 }

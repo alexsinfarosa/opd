@@ -10,6 +10,7 @@ import {MobxRouter} from 'mobx-router';
 import './app.css';
 
 // components
+// import Test from '../SelectionPanel/Test'
 import AppHeader from '../AppHeader/AppHeader'
 import SelectionPanel from '../SelectionPanel/SelectionPanel'
 // import Home from '../../views/Home/Home'
@@ -66,6 +67,9 @@ class AppComponent extends Component {
         <DevTools />
         <div className='hero-body'>
           <div className="container">
+
+            {/* FOR TESTING ONLY */}
+            {/* <Test /> */}
 
             {/* HEADER */}
             <div className="columns">

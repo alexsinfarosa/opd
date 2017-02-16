@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
 import views from 'config/views';
-// import { action } from 'mobx'
+// import { toJS } from 'mobx'
 import axios from "axios"
 import {format} from 'date-fns'
 
@@ -11,10 +11,13 @@ import StateSelector from './StateSelector';
 import StationSelector from './StationSelector';
 import DateSelector from './DateSelector';
 
-import { avgString,
+import {
   temperatureAdjustment,
   michiganAdjustment,
-  reduceArrayToOneDimension
+  reduceArrayToOneDimension,
+  unflattenArray,
+  calculateDegreeDay,
+  replacingOneMissingValue
 } from '../../utils';
 
 @inject('store') @observer
@@ -35,11 +38,13 @@ class SelectionPanel extends Component {
 
     // Making the call to the API
     console.log(`POST request: sid: ${params.sid}, sdate: ${params.sdate}, edate: ${params.edate}, elems: ${params.elems}`)
-    return axios.post("http://data.test.rcc-acis.org/StnData", params)
+
+    // POST request
+    axios.post("http://data.test.rcc-acis.org/StnData", params)
       .then(res => {
         if(!res.data.hasOwnProperty('error')) {
           this.props.store.app.updateACISData(res.data.data)
-          this.calculateDegreeDay(res.data.data)
+          this.resultsValues(res.data.data)
           this.calculateStageToDisplay(pest)
           router.goTo(views.results, {id: 111}, store)
         } else {
@@ -52,102 +57,80 @@ class SelectionPanel extends Component {
       })
   }
 
-  calculateDegreeDay = (data) => {
-    const {pest, station} = this.props.store.app
+  resultsValues = (data) => {
+    const {pest, station, startDate, endDate} = this.props.store.app
     const hourlyDataFlat = reduceArrayToOneDimension(data)
 
+    console.log('Original data:')
+    console.log(hourlyDataFlat)
     console.info(`ALL Missing values: ${hourlyDataFlat.filter(m => m === 'M').length}`)
 
     // Replace ONLY single non consecutive 'M' values
-    let hourlyDataWithReplacedValuesFlat = hourlyDataFlat.map((val,i) => {
-      if (i === 0 && val === 'M') {
-        return hourlyDataFlat[i+1]
-      } else if (i === (hourlyDataFlat.length - 1) && val === 'M') {
-        return hourlyDataFlat[i-1]
-      } else if (val === 'M' && hourlyDataFlat[i-1] !== 'M' && hourlyDataFlat[i+1] !== 'M') {
-        console.log(i)
-        console.log(hourlyDataFlat[i-1], hourlyDataFlat[i], hourlyDataFlat[i+1])
-        return avgString(hourlyDataFlat[i-1], hourlyDataFlat[i+1])
-      } else {
-        return val
-      }
-    })
+    let hourlyDataWithReplacedValuesFlat = replacingOneMissingValue(hourlyDataFlat)
 
     // Replace consecutive M's values with values from sister station
     const missingValues = hourlyDataWithReplacedValuesFlat.filter(e => e === 'M')
     console.info(`ONLY consecutive M values: ${missingValues.length}`)
+    console.log('after replacing single M')
+    console.log(hourlyDataWithReplacedValuesFlat)
     if(missingValues.length > 0) {
-      const idAndNetwork = this.requestSisterStation(station.id, station.network)
-      console.log(idAndNetwork)
-      const id = idAndNetwork[0]
-      const network = idAndNetwork[1]
-      hourlyDataWithReplacedValuesFlat = this.requestSisterData(hourlyDataWithReplacedValuesFlat, id, network)
+
+        // GET sister station
+        return axios.get(`http://newa.nrcc.cornell.edu/newaUtil/stationSisterInfo/${station.id}/${station.network}`)
+        .then(res => {
+          const idAndNetwork = res.data.temp.split(' ')
+          return idAndNetwork
+        })
+        .then(res => {
+          const params = {
+            sid: `${res[0]} ${res[1]}`,
+            sdate: format(startDate, 'YYYY-MM-DD'),
+            edate: format(endDate, 'YYYY-MM-DD'),
+            elems: temperatureAdjustment(station.network)
+          }
+
+          // Making the call to the API
+          console.log(`POST request: sid: ${params.sid}, sdate: ${params.sdate}, edate: ${params.edate}, elems: ${params.elems}`)
+
+
+          // Request the new data from sister station
+          axios.post("http://data.test.rcc-acis.org/StnData", params)
+            .then(res => {
+              if(!res.data.hasOwnProperty('error')) {
+                const sisterStationHourlyDataFlat = reduceArrayToOneDimension(res.data.data)
+                console.log('from sister')
+                console.log(sisterStationHourlyDataFlat)
+                console.log('replaced')
+
+                hourlyDataWithReplacedValuesFlat = this.replaceConsecutiveMValues(sisterStationHourlyDataFlat, hourlyDataWithReplacedValuesFlat)
+                console.log(hourlyDataWithReplacedValuesFlat)
+                const hourlyDataWithReplacedValues = unflattenArray(hourlyDataWithReplacedValuesFlat)
+                this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
+              } else {
+                console.log(res.data.error)
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
 
     // Unflatten the hourly data arry with all 'M' values replaced
-    const hourlyDataWithReplacedValues = []
-      while(hourlyDataWithReplacedValuesFlat.length > 0) {
-        hourlyDataWithReplacedValues.push(hourlyDataWithReplacedValuesFlat.splice(0,24))
-    }
+    const hourlyDataWithReplacedValues = unflattenArray(hourlyDataWithReplacedValuesFlat)
 
-    console.table(hourlyDataWithReplacedValues)
-
-    // Start creating variables to compute degree days
-    const min = hourlyDataWithReplacedValues.map(day => Math.min(...day))
-    const max = hourlyDataWithReplacedValues.map(day => Math.max(...day))
-    const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
-    const base = pest.baseTemp
-    const dd = avg.map(val => val-base > 0 ? val-base : 0)
-    console.info(`Min: ${min}`)
-    console.info(`Max: ${max}`)
-    console.info(`Avg: ${avg}`)
-    console.info(`DD: ${dd}`)
-    this.props.store.app.updateDegreeDay(dd)
+    // Update store with replaced values
+    this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
   }
 
-  requestSisterStation = (id, network) => {
-    return axios.get(`http://newa.nrcc.cornell.edu/newaUtil/stationSisterInfo/${id}/${network}`)
-    .then(res => {
-      return res.data.temp.split(' ')
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
-
-  requestSisterData = (currentStationData, id, network) => {
-    const {startDate, endDate} = this.props.store.app
-
-    // Creating the object for the POST request
-    const params = {
-      sid: `${id} ${network}`,
-      sdate: format(startDate, 'YYYY-MM-DD'),
-      edate: format(endDate, 'YYYY-MM-DD'),
-      elems: temperatureAdjustment(network)
-    }
-
-    console.log(`POST request: sid: ${params.sid}, sdate: ${params.sdate}, edate: ${params.edate}, elems: ${params.elems}`)
-
-    return axios.post("http://data.test.rcc-acis.org/StnData", params)
-      .then(res => {
-        if(!res.data.hasOwnProperty('error')) {
-          this.replaceConsecutiveMValues(res.data.data, currentStationData)
-          return
-        }
-        console.log(res.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    }
-
-  replaceConsecutiveMValues(sisterStationData, currentStationData) {
-    const sisterStationHourlyDataFlat = reduceArrayToOneDimension(sisterStationData)
-    console.log(sisterStationHourlyDataFlat)
+  replaceConsecutiveMValues(sister, current) {
     const tempArr = []
-    currentStationData.forEach((e, i) => {
+    current.forEach((e, i) => {
     	if(e === 'M') {
-    		tempArr.push(sisterStationHourlyDataFlat[i])
+    		tempArr.push(sister[i])
     	} else {
     		tempArr.push(e)
     	}

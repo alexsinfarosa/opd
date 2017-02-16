@@ -29,109 +29,11 @@ export const states = [
   {postalCode: 'ALL', lat: 42.5000, lon: -75.7000, zoom: 6, name: 'All States'}
 ]
 
-export let fakeData = [
-  [
-    '2017-01-01',
-    ['10', '10', '17', '18', 'M', 'M', '19', '21', '21', '21', '22', '25', '26', '27', '27', '27', '28', '28', '28', '29', '29', '29', '29', '29']
-  ],
-  [
-    '2017-01-02',
-    ['100', '5', '24', '25', '26', '26', '27', '27', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '32', '32', '32', '32', '30', 'M']
-  ],
-  [
-    '2017-01-03',
-    ['80', '2', '24', '24', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', '35', '35']
-  ],
-  [
-    '2017-01-04',
-    ['160', '4', '33', '22', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', 'M', 'M']
-  ]
-]
-
-export let sisterData = [
-  [
-    '2017-01-01',
-    ['11', '11', '17', '18', '100', '100', '19', '21', '21', '21', '22', '25', '26', '27', '27', '27', '28', '28', '28', '29', '29', '29', '29', '29']
-  ],
-  [
-    '2017-01-02',
-    ['100', '5', '24', '25', '26', '26', '27', '27', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '32', '32', '32', '32', '30', 'M']
-  ],
-  [
-    '2017-01-03',
-    ['80', '2', '24', '24', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', '35', '35']
-  ],
-  [
-    '2017-01-04',
-    ['160', '4', '33', '22', '26', '26', '27', '28', '28', '28', '28', '28', '28', '28', '29', '29', '30', '31', '33', '33', '33', '34', '35', '32']
-  ]
-]
-
 export const avgString = (a, b) => {
   const aNum = parseFloat(a)
   const bNum = parseFloat(b)
   return (Math.round((aNum + bNum) / 2)).toString()
 }
-
-export const calculateDegreeDay = (data) => {
-  // Creating an array only of hourly data
-  const hourlyData = data.map(day => day[1])
-
-  // Make the array one-dimension
-  const hourlyDataFlat = [].concat(...hourlyData)
-
-  // Replace ONLY single non consecutive 'M' values
-  const hourlyDataWithReplacedValuesFlat = hourlyDataFlat.map((val, i) => {
-    if (i === 0 && val === 'M') {
-      return hourlyDataFlat[i + 1]
-    } else if (i === (hourlyDataFlat.length - 1) && val === 'M') {
-      return hourlyDataFlat[i - 1]
-    } else if (val === 'M' && hourlyDataFlat[i - 1] !== 'M' && hourlyDataFlat[i + 1] !== 'M') {
-      return avgString(hourlyDataFlat[i - 1], hourlyDataFlat[i + 1])
-    } else {
-      return val
-    }
-  })
-
-  // Replace multiple consecutive 'M' values
-  const hourlyDataWithReplacedValuesFromSisterStationsFlat = hourlyDataWithReplacedValuesFlat.map((val, i) => {
-    const hourlyDataSister = sisterData.map(day => day[1])
-    const hourlDataSisterflat = [].concat(...hourlyDataSister)
-    if (val === 'M' && hourlDataSisterflat[i] !== 'M') {
-      return hourlDataSisterflat[i]
-    } else if (val === 'M' && hourlDataSisterflat[i] === 'M') {
-        // Return forecast values
-      return '0'
-    } else {
-      return val
-    }
-  })
-
-  // Unflatten the hourly data arry with all 'M' values replaced
-  const hourlyDataWithReplacedValues = []
-  while (hourlyDataWithReplacedValuesFromSisterStationsFlat.length > 0) {
-    hourlyDataWithReplacedValues.push(hourlyDataWithReplacedValuesFromSisterStationsFlat.splice(0, 24))
-  }
-
-  // console.table(hourlyDataWithReplacedValues)
-
-  // Start creating variables to compute degree days
-  const min = hourlyDataWithReplacedValues.map(day => Math.min(...day))
-  const max = hourlyDataWithReplacedValues.map(day => Math.max(...day))
-  const avg = min.map((val, i) => (Math.round((val + max[i]) / 2)))
-  const base = 50
-  const degreeDay = avg.map(val => val - base > 0 ? val - base : 0)
-  console.log(`Min: ${min} Max: ${max} Avg: ${avg} Degree day: ${degreeDay}`)
-  return degreeDay
-}
-
-export const calculateCumulativeDegreeDay = (degreeDayData) => {
-  const tempArr = []
-  degreeDayData.reduce((prev, curr, i) => tempArr[i] = prev + curr, 0)
-  return tempArr
-}
-
-// console.log(`Cumulative Degree Day: ${calculateCumulativeDegreeDay(calculateDegreeDay(fakeData))}`)
 
 // Adjust Temperature parameter and Michigan network id
 export const temperatureAdjustment = (network) => {
@@ -152,9 +54,52 @@ export const michiganAdjustment = (station) => {
   return station.id
 }
 
+// flatten the array from ACIS. Each element is an array with 2 elements, date(Sring) and an array with 24 values
 export const reduceArrayToOneDimension = (data) => {
   const hourlyData = data.map(day => day[1])
   return [].concat(...hourlyData)
+}
+
+// un-flatten an array
+export const unflattenArray = (data) => {
+  const arr = []
+    while(data.length > 0) {
+      arr.push(data.splice(0,24))
+    }
+  return arr
+}
+
+export const calculateDegreeDay = (pest, data) => {
+  const min = data.map(day => Math.min(...day))
+  const max = data.map(day => Math.max(...day))
+  const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
+  const base = pest.baseTemp
+  const dd = avg.map(val => val-base > 0 ? val-base : 0)
+  console.info(`Min: ${min}`)
+  console.info(`Max: ${max}`)
+  console.info(`Avg: ${avg}`)
+  console.info(`DD: ${dd}`)
+  return dd
+}
+
+export const calculateCumulativeDegreeDay = (degreeDayData) => {
+  const arr = []
+  degreeDayData.reduce((prev, curr, i) => arr[i] = prev + curr, 0)
+  return arr
+}
+
+export const replacingOneMissingValue = (data) => {
+  return data.map((val,i) => {
+    if (i === 0 && val === 'M') {
+      return data[i+1]
+    } else if (i === (data.length - 1) && val === 'M') {
+      return data[i-1]
+    } else if (val === 'M' && data[i-1] !== 'M' && data[i+1] !== 'M') {
+      return avgString(data[i-1], data[i+1])
+    } else {
+      return val
+    }
+  })
 }
 
 export const matchIconsToStations = (stations, state) => {
@@ -186,12 +131,12 @@ export const matchIconsToStations = (stations, state) => {
 }
 
 export const toDisplayCumulativeDegreeDay = (data2, fakeData) => {
-  const tempArr = []
+  const arr = []
   data2.forEach((e,i) => {
     const newObj = {}
     newObj['Date'] = format(fakeData[i][0], 'MMM D')
     newObj['Accumulated Degree-Days'] = e
-    tempArr.push(newObj)
+    arr.push(newObj)
   })
-  return tempArr
+  return arr
 }

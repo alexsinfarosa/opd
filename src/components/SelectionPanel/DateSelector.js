@@ -24,7 +24,7 @@ class DateSelector extends Component {
                   altFormat: "F j, Y",
                   inline: false, // show the calendar inline
                   altInputClass: 'input input-calender',
-                  defaultDate: new Date('2016-12-31') // JUST for Testing
+                  defaultDate: new Date('2016-01-30') // JUST for Testing
                 }
               }
               // placeholder="Select Date"

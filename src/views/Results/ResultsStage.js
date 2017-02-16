@@ -1,0 +1,62 @@
+import React, {Component} from 'react'
+import {inject, observer} from 'mobx-react'
+import { action, computed } from 'mobx'
+
+@inject('store') @observer
+export default class ResultsHeader extends Component {
+
+  @action setStage = (e) => {
+    const { pest } = this.props.store.app
+    const selectedStage = pest.preBiofix.filter(stage => stage.stage === e.target.value)[0]
+    this.props.store.app.stage = selectedStage
+  }
+
+  @computed get getStageList() {
+    const { pest } = this.props.store.app
+    if (Object.keys(pest).length !== 0) {
+      return pest.preBiofix.map(stage =>
+        <option key={stage.id}>{stage.stage}</option>)
+    }
+  }
+
+  render() {
+    const {stage} = this.props.store.app
+    return (
+      <div>
+        <div className="columns">
+          <div className="column has-text-centered">
+            <span className="select">
+              <select
+                onChange={this.setStage}
+                value={stage ? stage.stage : ''}
+              >
+                <option>Select a stage</option>
+                {this.getStageList}
+              </select>
+            </span>
+            <p><small>Change the pest stage above and the model will recalculate recommendations.</small></p>
+          </div>
+        </div>
+
+        <div className="columns">
+          <div className="column has-text-centered">
+            <table className="table is-bordered is-striped">
+              <thead>
+                <tr>
+                  <th>Pest Status</th>
+                  <th>Pest Management</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{stage ? stage.management : ''}</td>
+                  <td>{stage ? stage.status : ''}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    )
+  }
+}

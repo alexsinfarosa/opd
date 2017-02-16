@@ -5,6 +5,12 @@ import {format, getYear} from 'date-fns'
 
 
 class AppStore {
+// TESTING----------------------------------------------------------------------
+@observable Tstations = [];
+@observable Tstation = {};
+@action updateTstation = (e) => {
+  this.Tstation = this.Tstations.filter(station => station.name === e.target.value)[0]
+}
 
 // pest ------------------------------------------------------------------------
   @observable pests = pestData;
@@ -40,7 +46,7 @@ class AppStore {
 @observable endDate = ''
 @action updateEndDate = (e) => {
   this.endDate = format(e,'MM/DD/YYYY')
-  this.startDate = `01/01/${getYear(this.endDate)}`
+  this.startDate = `01/20/${getYear(this.endDate)}`
 }
 
 // stage -----------------------------------------------------------------------
