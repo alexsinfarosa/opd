@@ -3,7 +3,7 @@ import {inject, observer} from 'mobx-react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from 'recharts'
 import CustomLabel from './CustomLabel'
 
-import {toDisplayCumulativeDegreeDay} from '../../utils'
+import {cumulativeDegreeDayDataGraph} from '../../utils'
 
 @inject('store') @observer
 export default class ResultsTable extends Component {
@@ -14,7 +14,7 @@ export default class ResultsTable extends Component {
         <div className="column has-text-centered">
           <div className="title is-5">Accumulated Degree-Days</div>
           <ResponsiveContainer width={700} height="85%">
-            <LineChart data={toDisplayCumulativeDegreeDay(cumulativeDegreeDay, ACISData)}>
+            <LineChart data={cumulativeDegreeDayDataGraph(cumulativeDegreeDay, ACISData)}>
               <XAxis dataKey="Date" tick={<CustomLabel />}/>
               <YAxis/>
               <Tooltip/>

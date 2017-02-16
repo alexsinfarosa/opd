@@ -29,14 +29,14 @@ export const states = [
   {postalCode: 'ALL', lat: 42.5000, lon: -75.7000, zoom: 6, name: 'All States'}
 ]
 
-export const avgString = (a, b) => {
+export const avgTwoStringNumbers = (a, b) => {
   const aNum = parseFloat(a)
   const bNum = parseFloat(b)
   return (Math.round((aNum + bNum) / 2)).toString()
 }
 
 // Adjust Temperature parameter and Michigan network id
-export const temperatureAdjustment = (network) => {
+export const networkTemperatureAdjustment = (network) => {
   // Handling different temperature parameter for each network
   if (network === 'newa' || network === 'icao' || network === 'njwx') {
     return '23'
@@ -46,7 +46,7 @@ export const temperatureAdjustment = (network) => {
 }
 
 // Handling Michigan state network
-export const michiganAdjustment = (station) => {
+export const michiganIdAdjustment = (station) => {
   if (station.state === 'MI' && station.network === 'miwx' && station.id.slice(0, 3) === 'ew_') {
     // example: ew_ITH
     return station.id.slice(3, 6)
@@ -54,13 +54,14 @@ export const michiganAdjustment = (station) => {
   return station.id
 }
 
-// flatten the array from ACIS. Each element is an array with 2 elements, date(Sring) and an array with 24 values
-export const reduceArrayToOneDimension = (data) => {
+// Flatten the array from ACIS.
+// Each element is an array with 2 elements, date(Sring) and an array with 24 values
+export const flattenArray = (data) => {
   const hourlyData = data.map(day => day[1])
   return [].concat(...hourlyData)
 }
 
-// un-flatten an array
+// Un-flatten an array
 export const unflattenArray = (data) => {
   const arr = []
     while(data.length > 0) {
@@ -69,6 +70,7 @@ export const unflattenArray = (data) => {
   return arr
 }
 
+// compute degree days
 export const calculateDegreeDay = (pest, data) => {
   const min = data.map(day => Math.min(...day))
   const max = data.map(day => Math.max(...day))
@@ -88,22 +90,34 @@ export const calculateCumulativeDegreeDay = (degreeDayData) => {
   return arr
 }
 
-export const replacingOneMissingValue = (data) => {
+export const replaceSingleMissingValues = (data) => {
   return data.map((val,i) => {
     if (i === 0 && val === 'M') {
       return data[i+1]
     } else if (i === (data.length - 1) && val === 'M') {
       return data[i-1]
     } else if (val === 'M' && data[i-1] !== 'M' && data[i+1] !== 'M') {
-      return avgString(data[i-1], data[i+1])
+      return avgTwoStringNumbers(data[i-1], data[i+1])
     } else {
       return val
     }
   })
 }
 
+export const replaceConsecutiveMissingValues = (sisterStation, currentStation) => {
+  const arr = []
+  currentStation.forEach((e, i) => {
+    if(e === 'M') {
+      arr.push(sisterStation[i])
+    } else {
+      arr.push(e)
+    }
+  })
+  return arr
+}
+
 export const matchIconsToStations = (stations, state) => {
-  const results = []
+  const arr = []
   const newa = 'http://newa.nrcc.cornell.edu/gifs/newa_small.png'
   const newaGray = 'http://newa.nrcc.cornell.edu/gifs/newa_smallGray.png'
   const airport = 'http://newa.nrcc.cornell.edu/gifs/airport.png'
@@ -115,22 +129,22 @@ export const matchIconsToStations = (stations, state) => {
     if (station.network === 'newa' || station.network === 'njwx' || station.network === 'miwx' || (station.network === 'cu_log' && station.state !== 'NY')) {
       const newObj = station
       station.state === state.postalCode || state.postalCode === 'ALL' ? newObj['icon'] = newa : newObj['icon'] = newaGray
-      results.push(newObj)
+      arr.push(newObj)
     } else if (station.network === 'cu_log') {
       const newObj = station
       station.state === state.postalCode || state.postalCode === 'ALL' ? newObj['icon'] = culog : newObj['icon'] = culogGray
       newObj['icon'] = culog
-      results.push(newObj)
+      arr.push(newObj)
     } else if (station.network === 'icao') {
       const newObj = station
       station.state === state.postalCode || state.postalCode === 'ALL' ? newObj['icon'] = airport : newObj['icon'] = airportGray
-      results.push(newObj)
+      arr.push(newObj)
     }
   })
-  return results
+  return arr
 }
 
-export const toDisplayCumulativeDegreeDay = (data2, fakeData) => {
+export const cumulativeDegreeDayDataGraph = (data2, fakeData) => {
   const arr = []
   data2.forEach((e,i) => {
     const newObj = {}

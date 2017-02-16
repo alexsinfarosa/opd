@@ -12,12 +12,13 @@ import StationSelector from './StationSelector';
 import DateSelector from './DateSelector';
 
 import {
-  temperatureAdjustment,
-  michiganAdjustment,
-  reduceArrayToOneDimension,
+  networkTemperatureAdjustment,
+  michiganIdAdjustment,
+  flattenArray,
   unflattenArray,
   calculateDegreeDay,
-  replacingOneMissingValue
+  replaceSingleMissingValues,
+  replaceConsecutiveMissingValues
 } from '../../utils';
 
 @inject('store') @observer
@@ -30,10 +31,10 @@ class SelectionPanel extends Component {
 
     // Creating the object for the POST request
     const params = {
-      sid: `${michiganAdjustment(station)} ${station.network}`,
+      sid: `${michiganIdAdjustment(station)} ${station.network}`,
       sdate: format(startDate, 'YYYY-MM-DD'),
       edate: format(endDate, 'YYYY-MM-DD'),
-      elems: temperatureAdjustment(station.network)
+      elems: networkTemperatureAdjustment(station.network)
     }
 
     // Making the call to the API
@@ -59,14 +60,14 @@ class SelectionPanel extends Component {
 
   resultsValues = (data) => {
     const {pest, station, startDate, endDate} = this.props.store.app
-    const hourlyDataFlat = reduceArrayToOneDimension(data)
+    const hourlyDataFlat = flattenArray(data)
 
     console.log('Original data:')
     console.log(hourlyDataFlat)
     console.info(`ALL Missing values: ${hourlyDataFlat.filter(m => m === 'M').length}`)
 
     // Replace ONLY single non consecutive 'M' values
-    let hourlyDataWithReplacedValuesFlat = replacingOneMissingValue(hourlyDataFlat)
+    let hourlyDataWithReplacedValuesFlat = replaceSingleMissingValues(hourlyDataFlat)
 
     // Replace consecutive M's values with values from sister station
     const missingValues = hourlyDataWithReplacedValuesFlat.filter(e => e === 'M')
@@ -86,7 +87,7 @@ class SelectionPanel extends Component {
             sid: `${res[0]} ${res[1]}`,
             sdate: format(startDate, 'YYYY-MM-DD'),
             edate: format(endDate, 'YYYY-MM-DD'),
-            elems: temperatureAdjustment(station.network)
+            elems: networkTemperatureAdjustment(station.network)
           }
 
           // Making the call to the API
@@ -97,12 +98,12 @@ class SelectionPanel extends Component {
           axios.post("http://data.test.rcc-acis.org/StnData", params)
             .then(res => {
               if(!res.data.hasOwnProperty('error')) {
-                const sisterStationHourlyDataFlat = reduceArrayToOneDimension(res.data.data)
+                const sisterStationHourlyDataFlat = flattenArray(res.data.data)
                 console.log('from sister')
                 console.log(sisterStationHourlyDataFlat)
                 console.log('replaced')
 
-                hourlyDataWithReplacedValuesFlat = this.replaceConsecutiveMValues(sisterStationHourlyDataFlat, hourlyDataWithReplacedValuesFlat)
+                hourlyDataWithReplacedValuesFlat = replaceConsecutiveMissingValues(sisterStationHourlyDataFlat, hourlyDataWithReplacedValuesFlat)
                 console.log(hourlyDataWithReplacedValuesFlat)
                 const hourlyDataWithReplacedValues = unflattenArray(hourlyDataWithReplacedValuesFlat)
                 this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
@@ -125,18 +126,6 @@ class SelectionPanel extends Component {
 
     // Update store with replaced values
     this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
-  }
-
-  replaceConsecutiveMValues(sister, current) {
-    const tempArr = []
-    current.forEach((e, i) => {
-    	if(e === 'M') {
-    		tempArr.push(sister[i])
-    	} else {
-    		tempArr.push(e)
-    	}
-    })
-    return tempArr
   }
 
   // If there are stages chose the one where the current dd value is between ddlo and ddhi
