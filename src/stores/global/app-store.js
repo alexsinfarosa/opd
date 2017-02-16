@@ -46,7 +46,7 @@ class AppStore {
 @observable endDate = ''
 @action updateEndDate = (e) => {
   this.endDate = format(e,'MM/DD/YYYY')
-  this.startDate = `01/20/${getYear(this.endDate)}`
+  this.startDate = `01/01/${getYear(this.endDate)}`
 }
 
 // stage -----------------------------------------------------------------------

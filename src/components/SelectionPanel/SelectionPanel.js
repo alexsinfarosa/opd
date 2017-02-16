@@ -106,6 +106,7 @@ class SelectionPanel extends Component {
                 console.log(hourlyDataWithReplacedValuesFlat)
                 const hourlyDataWithReplacedValues = unflattenArray(hourlyDataWithReplacedValuesFlat)
                 this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
+                this.calculateStageToDisplay(pest)
               } else {
                 console.log(res.data.error)
               }
