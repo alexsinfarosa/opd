@@ -25,6 +25,7 @@ export default class ResultsHeader extends Component {
       <div>
         <div className="columns">
           <div className="column has-text-centered">
+            <span><strong>Phenological Stage: </strong></span>
             <span className="select">
               <select
                 onChange={this.setStage}
@@ -34,7 +35,7 @@ export default class ResultsHeader extends Component {
                 {this.getStageList}
               </select>
             </span>
-            <p><small>Change the pest stage above and the model will recalculate recommendations.</small></p>
+            <p><small>The phenological stage above is estimated. Select the actual stage and the model will recalculate recommendations.</small></p>
           </div>
         </div>
 
