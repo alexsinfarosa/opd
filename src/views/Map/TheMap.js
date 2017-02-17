@@ -15,10 +15,11 @@ export default class TheMap extends Component {
 
   @action onClickSetStation = (e) => {
     const {lat, lng} = e.latlng
-    const {stations, state} = this.props.store.app
+    const {stations, state, station} = this.props.store.app
     const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
     if (selectedStation.state === state.postalCode) {
-      this.props.store.app.updateStation(selectedStation)
+      this.props.store.app.station = selectedStation
+      localStorage.setItem('station', JSON.stringify(station))
     } else {
       const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
       const state = states.filter(state => state.postalCode === selectedStation.state)[0]

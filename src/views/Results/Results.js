@@ -17,10 +17,21 @@ import './Results.css'
 
 @inject('store') @observer
 export default class Results extends Component {
+
+  state = {
+    isGraphDisplayed: false
+  }
+
+  handleGraphClick = () => {
+   this.setState(prevState => ({
+     isGraphDisplayed: !prevState.isGraphDisplayed
+   }));
+ }
+
   render () {
     return (
-      <section className="hero">
-        <div className="hero-body">
+      // <section className="hero">
+      //   <div className="hero-body">
           <div className="container has-text-centered">
 
             {/* HEADER */}
@@ -32,7 +43,13 @@ export default class Results extends Component {
             <ResultsTable />
 
             {/* GRAPH */}
-            <ResultsGraph />
+            <button
+              className="button"
+              onClick={this.handleGraphClick}>
+              {this.state.isGraphDisplayed ? 'Hide' : 'Show'} Accumulated Degree-Days Graph
+            </button>
+            <br/>
+            {this.state.isGraphDisplayed && <ResultsGraph />}
 
             <br/>
 
@@ -79,8 +96,8 @@ export default class Results extends Component {
             </div>
 
           </div>
-        </div>
-      </section>
+      //   </div>
+      // </section>
     )
   }
 }

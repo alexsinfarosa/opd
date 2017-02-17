@@ -30,7 +30,7 @@ class AppStore {
   }
   @observable station = {};
   @action updateStation = (e) => {
-    this.station = this.stations.filter(station => station.name === e.name)[0]
+    this.station = this.stations.filter(station => station.name === e.target.value)[0]
     localStorage.setItem('station', JSON.stringify(this.station))
   }
 
