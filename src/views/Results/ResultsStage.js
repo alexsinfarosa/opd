@@ -26,7 +26,7 @@ export default class ResultsHeader extends Component {
         <div className="columns">
           <div className="column has-text-centered">
             <div className="align-middle">
-              <span style={{'margin-right': '10px'}}>
+              <span style={{'marginRight': '10px','marginBottom': '4px'}}>
                 <strong>Phenological Stage: </strong>
               </span>
               <span className="select">
@@ -53,10 +53,12 @@ export default class ResultsHeader extends Component {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="has-text-centered">{stage ? stage.management : ''}</td>
-                  <td className="has-text-centered">{stage ? stage.status : ''}</td>
-                </tr>
+                {stage &&
+                  <tr>
+                    <td className="has-text-centered">{stage.management}</td>
+                    <td className="has-text-centered">{stage.status}</td>
+                  </tr>
+                }
               </tbody>
             </table>
           </div>

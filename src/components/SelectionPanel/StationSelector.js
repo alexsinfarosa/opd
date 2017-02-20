@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 // import mobx from 'mobx';
 
 @inject('store') @observer
@@ -13,7 +14,8 @@ class StationSelector extends Component {
 
     return (
       <div>
-        <label className="label">Select a Station: <span className="primary-color">{getFilteredStations.length}</span></label>
+        <label className="label">Select a Station:
+        <span className="primary-color">{getFilteredStations.length}</span></label>
         <div className="control">
           <span className="select">
             <select

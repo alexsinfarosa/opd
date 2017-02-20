@@ -30,16 +30,15 @@ export default class Results extends Component {
             {/* DATA */}
             <ResultsTable />
 
-            <br/>
 
             {/* DETAILS STAGE */}
             <ResultsStage />
 
             <br/>
-            
+
             {/* DISCLAIMER */}
             <div className="columns">
-              <div className="column has-text-centered">
+              <div className="column has-text-left">
                 <p><small><strong>Disclaimer: These are theoretical predictions and forecasts</strong>. The theoretical models predicting pest development or disease risk use the weather data collected (or forecasted) from the weather station location. These results should not be substituted for actual observations of plant growth stage, pest presence, and disease occurrence determined through scouting or insect pheromone traps.</small></p>
               </div>
             </div>

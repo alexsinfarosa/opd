@@ -10,14 +10,8 @@ import { MobxRouter } from 'mobx-router';
 import './app.css';
 
 // components
-// import Test from '../SelectionPanel/Test'
 import AppHeader from '../AppHeader/AppHeader';
 import SelectionPanel from '../SelectionPanel/SelectionPanel';
-// import Home from '../../views/Home/Home'
-// import TheMap from './views/Map/Map'
-// import Results from './views/Results/Results'
-// import MoreInfo from './views/MoreInfo/MoreInfo'
-// import ActiveLink from './components/ActiveLink'
 
 // devTools
 import DevTools from 'mobx-react-devtools';

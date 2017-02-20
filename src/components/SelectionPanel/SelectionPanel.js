@@ -136,6 +136,8 @@ class SelectionPanel extends Component {
     if (pest.preBiofix.length > 0) {
       const selectedStage = pest.preBiofix.filter(stage => (currentDegreeDayValue > stage.ddlo && currentDegreeDayValue < stage.ddhi))
       this.props.store.app.updateStage(selectedStage[0])
+    } else {
+      this.props.store.app.updateStage({})
     }
   }
 
