@@ -44,14 +44,13 @@ class AppStore {
   @observable endDate = new Date();
   @action updateEndDate = e => {
     this.endDate = format(e, 'MM/DD/YYYY');
+    this.startDate = `01/01/${getYear(this.endDate)}`;
 
     // No Forecast
     if (isBefore(this.endDate, new Date())) {
       const endDatePlusFiveDays = addDays(this.endDate, 5);
       this.endDate = format(endDatePlusFiveDays, 'MM/DD/YYYY');
-      this.startDate = `01/01/${getYear(this.endDate)}`;
     }
-    this.startDate = `01/01/${getYear(this.endDate)}`;
   };
 
   // stage -----------------------------------------------------------------------

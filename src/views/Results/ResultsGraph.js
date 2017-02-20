@@ -21,7 +21,7 @@ export default class ResultsTable extends Component {
       <div className="columns">
         <div className="column has-text-centered">
           {/* <div className="title is-5">Accumulated Degree-Days</div> */}
-
+          <br/>
           <LineChart
             width={730}
             height={260}

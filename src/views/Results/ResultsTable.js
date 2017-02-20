@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { format } from 'date-fns';
+import ResultsGraph from './ResultsGraph'
 
 @inject('store')
 @observer
 export default class ResultsTable extends Component {
+
+  state = {
+    isGraphDisplayed: false
+  }
+
+  handleGraphClick = () => {
+   this.setState(prevState => ({
+     isGraphDisplayed: !prevState.isGraphDisplayed
+   }));
+ }
+
   render() {
     const {
       pest,
@@ -18,14 +30,14 @@ export default class ResultsTable extends Component {
           <table className="table is-bordered is-striped is-narrow">
             <thead className="t-header">
               <tr>
-                <th />
+                <th rowSpan="2"/>
                 <th className="before">Past</th>
                 <th className="before">Past</th>
                 <th className="before">Current</th>
                 <th className="after" colSpan="5"> Ensuing 5 Days </th>
               </tr>
-              <tr>
-                <th />
+              <tr className="has-text-centered">
+                {/* <th rowSpan="2"/> */}
                 <th className="before">
                   {!ACISData
                     ? ''
@@ -69,7 +81,7 @@ export default class ResultsTable extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr className="has-text-centered">
                 <th>Daily Degree Days (Base {pest.baseTemp}BE)</th>
                 <td>{degreeDay[degreeDay.length - 8]}</td>
                 <td>{degreeDay[degreeDay.length - 7]}</td>
@@ -80,7 +92,7 @@ export default class ResultsTable extends Component {
                 <td>{degreeDay[degreeDay.length - 2]}</td>
                 <td>{degreeDay[degreeDay.length - 1]}</td>
               </tr>
-              <tr>
+              <tr className="has-text-centered">
                 <th>Accumulation since January 1st</th>
                 <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 8]}</td>
                 <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 7]}</td>
@@ -90,6 +102,17 @@ export default class ResultsTable extends Component {
                 <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 3]}</td>
                 <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 2]}</td>
                 <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 1]}</td>
+              </tr>
+              <tr>
+                <td className="has-text-centered" colSpan="9">
+                  <button
+                    className="button is-link"
+                    onClick={this.handleGraphClick}>
+                    {this.state.isGraphDisplayed ? 'Hide' : 'Show'} Accumulated Degree-Days Graph
+                  </button>
+                  
+                  {this.state.isGraphDisplayed && <ResultsGraph />}
+                </td>
               </tr>
             </tbody>
           </table>

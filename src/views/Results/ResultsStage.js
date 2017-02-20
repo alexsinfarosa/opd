@@ -25,16 +25,20 @@ export default class ResultsHeader extends Component {
       <div>
         <div className="columns">
           <div className="column has-text-centered">
-            <span><strong>Phenological Stage: </strong></span>
-            <span className="select">
-              <select
-                onChange={this.setStage}
-                value={stage ? stage.stage : ''}
-              >
-                <option>Select a stage</option>
-                {this.getStageList}
-              </select>
-            </span>
+            <div className="align-middle">
+              <span style={{'margin-right': '10px'}}>
+                <strong>Phenological Stage: </strong>
+              </span>
+              <span className="select">
+                <select
+                  onChange={this.setStage}
+                  value={stage ? stage.stage : ''}
+                >
+                  <option>Select a stage</option>
+                  {this.getStageList}
+                </select>
+              </span>
+            </div>
             <p><small>The phenological stage above is estimated. Select the actual stage and the model will recalculate recommendations.</small></p>
           </div>
         </div>
@@ -50,8 +54,8 @@ export default class ResultsHeader extends Component {
               </thead>
               <tbody>
                 <tr>
-                  <td>{stage ? stage.management : ''}</td>
-                  <td>{stage ? stage.status : ''}</td>
+                  <td className="has-text-centered">{stage ? stage.management : ''}</td>
+                  <td className="has-text-centered">{stage ? stage.status : ''}</td>
                 </tr>
               </tbody>
             </table>

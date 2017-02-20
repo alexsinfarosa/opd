@@ -9,7 +9,6 @@ import acisPic from './images/PoweredbyACIS_NRCC.jpg'
 // Components
 import ResultsHeader from './ResultsHeader'
 import ResultsTable from './ResultsTable'
-import ResultsGraph from './ResultsGraph'
 import ResultsStage from './ResultsStage'
 
 // style
@@ -17,17 +16,6 @@ import './Results.css'
 
 @inject('store') @observer
 export default class Results extends Component {
-
-  state = {
-    isGraphDisplayed: false
-  }
-
-  handleGraphClick = () => {
-   this.setState(prevState => ({
-     isGraphDisplayed: !prevState.isGraphDisplayed
-   }));
- }
-
   render () {
     return (
       // <section className="hero">
@@ -42,21 +30,13 @@ export default class Results extends Component {
             {/* DATA */}
             <ResultsTable />
 
-            {/* GRAPH */}
-            <button
-              className="button"
-              onClick={this.handleGraphClick}>
-              {this.state.isGraphDisplayed ? 'Hide' : 'Show'} Accumulated Degree-Days Graph
-            </button>
-            <br/>
-            {this.state.isGraphDisplayed && <ResultsGraph />}
-
             <br/>
 
             {/* DETAILS STAGE */}
             <ResultsStage />
 
-
+            <br/>
+            
             {/* DISCLAIMER */}
             <div className="columns">
               <div className="column has-text-centered">
