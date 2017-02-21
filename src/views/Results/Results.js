@@ -12,71 +12,67 @@ import ResultsTable from './ResultsTable'
 import ResultsStage from './ResultsStage'
 
 // style
-import './Results.css'
+import './results.css'
 
 @inject('store') @observer
 export default class Results extends Component {
   render () {
     return (
-      // <section className="hero">
-      //   <div className="hero-body">
-          <div className="container has-text-centered">
+        <div className="container has-text-centered">
 
-            {/* HEADER */}
-            <ResultsHeader />
+          {/* HEADER */}
+          <ResultsHeader />
 
-            <br/>
+          <br/>
 
-            {/* DATA */}
-            <ResultsTable />
+          {/* DATA */}
+          <ResultsTable />
 
 
-            {/* DETAILS STAGE */}
-            <ResultsStage />
+          {/* DETAILS STAGE */}
+          <ResultsStage />
 
-            <br/>
+          <br/>
 
-            {/* DISCLAIMER */}
-            <div className="columns">
-              <div className="column has-text-left">
-                <p><small><strong>Disclaimer: These are theoretical predictions and forecasts</strong>. The theoretical models predicting pest development or disease risk use the weather data collected (or forecasted) from the weather station location. These results should not be substituted for actual observations of plant growth stage, pest presence, and disease occurrence determined through scouting or insect pheromone traps.</small></p>
-              </div>
+          {/* DISCLAIMER */}
+          <div className="columns">
+            <div className="column has-text-left">
+              <p><small><strong>Disclaimer: These are theoretical predictions and forecasts</strong>. The theoretical models predicting pest development or disease risk use the weather data collected (or forecasted) from the weather station location. These results should not be substituted for actual observations of plant growth stage, pest presence, and disease occurrence determined through scouting or insect pheromone traps.</small></p>
             </div>
-
-
-            {/* IMAGES */}
-            <div className="hero-foot">
-              <div className="columns">
-
-                <div className="column is-one-third">
-                  <figure className="image is-64x64 center-image">
-                    <a href="http://newa.cornell.edu/">
-                      <img src={newaPic} alt="newa"/>
-                    </a>
-                  </figure>
-
-                </div>
-                <div className="column is-one-third">
-                  <figure className="image is-64x64 center-image">
-                    <a href="http://treefruitipm.info/">
-                      <img src={pmepPic} alt="pmep"/>
-                    </a>
-                  </figure>
-                </div>
-                <div className="column is-one-third">
-                  <figure className="image is-64x64 center-image">
-                    <a href="http://www.rcc-acis.org/">
-                      <img src={acisPic} alt="acis"/>
-                    </a>
-                  </figure>
-                </div>
-
-              </div>
-            </div>
-
           </div>
-      //   </div>
-      // </section>
+
+
+          {/* IMAGES */}
+          <div className="hero-foot">
+            <div className="columns">
+
+              <div className="column is-one-third">
+                <figure className="image is-64x64 center-image">
+                  <a href="http://newa.cornell.edu/">
+                    <img src={newaPic} alt="newa"/>
+                  </a>
+                </figure>
+
+              </div>
+              <div className="column is-one-third">
+                <figure className="image is-64x64 center-image">
+                  <a href="http://treefruitipm.info/">
+                    <img src={pmepPic} alt="pmep"/>
+                  </a>
+                </figure>
+              </div>
+              <div className="column is-one-third">
+                <figure className="image is-64x64 center-image">
+                  <a href="http://www.rcc-acis.org/">
+                    <img src={acisPic} alt="acis"/>
+                  </a>
+                </figure>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
     )
   }
 }

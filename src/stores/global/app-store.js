@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import pestData from '../../../public/pestData.json';
 import { states, matchIconsToStations } from '../../utils';
 import { format, getYear, isBefore, addDays } from 'date-fns';
+import _ from 'lodash';
 
 class AppStore {
   // pest ------------------------------------------------------------------------
@@ -60,6 +61,11 @@ class AppStore {
   // ACISData --------------------------------------------------------------------
   @observable ACISData = [];
   @action updateACISData = d => this.ACISData = d;
+  @computed get displayMonth() {
+    const days = this.ACISData.map(e => e[0])
+    const formattedDays = _.takeRight(days, 8)
+    return formattedDays.map(e => format(e, 'MMM D'))
+  }
 
   // degreeDay -------------------------------------------------------------------
   @observable degreeDay = [];
@@ -68,6 +74,18 @@ class AppStore {
     const results = [];
     this.degreeDay.reduce((prev, curr, i) => results[i] = prev + curr, 0);
     return results;
+  }
+  @computed get cumulativeDegreeDayDataGraph() {
+    console.log(this.ACISData.length)
+    console.log(this.cumulativeDegreeDay.length)
+    const arr = []
+    this.ACISData.forEach((e,i) => {
+      const newObj = {}
+      newObj['Date'] = format(this.ACISData[i][0], 'MMM D')
+      newObj['Accumulated Degree-Days'] = this.cumulativeDegreeDay[i]
+      arr.push(newObj)
+    })
+    return arr
   }
 
   // ActiveLinks -------------------------------------------------------------------

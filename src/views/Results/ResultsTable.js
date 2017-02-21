@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { format } from 'date-fns';
 import ResultsGraph from './ResultsGraph'
 
 @inject('store')
@@ -20,10 +19,11 @@ export default class ResultsTable extends Component {
   render() {
     const {
       pest,
-      ACISData,
       degreeDay,
-      cumulativeDegreeDay
+      cumulativeDegreeDay,
+      displayMonth
     } = this.props.store.app;
+
     return (
       <div className="columns">
         <div className="column has-text-centered">
@@ -37,47 +37,7 @@ export default class ResultsTable extends Component {
                 <th className="after" colSpan="5"> Ensuing 5 Days </th>
               </tr>
               <tr className="has-text-centered">
-                {/* <th rowSpan="2"/> */}
-                <th className="before">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 8][0], 'MMM D')}
-                </th>
-                <th className="before">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 7][0], 'MMM D')}
-                </th>
-                <th className="before">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 6][0], 'MMM D')}
-                </th>
-                <th className="after">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 5][0], 'MMM D')}
-                </th>
-                <th className="after">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 4][0], 'MMM D')}
-                </th>
-                <th className="after">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 3][0], 'MMM D')}
-                </th>
-                <th className="after">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 2][0], 'MMM D')}
-                </th>
-                <th className="after">
-                  {!ACISData
-                    ? ''
-                    : format(ACISData[ACISData.length - 1][0], 'MMM D')}
-                </th>
+                {displayMonth.map(month => <th key={month} className="before">{month}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -110,7 +70,7 @@ export default class ResultsTable extends Component {
                     onClick={this.handleGraphClick}>
                     {this.state.isGraphDisplayed ? 'Hide' : 'Show'} Accumulated Degree-Days Graph
                   </button>
-                  
+
                   {this.state.isGraphDisplayed && <ResultsGraph />}
                 </td>
               </tr>

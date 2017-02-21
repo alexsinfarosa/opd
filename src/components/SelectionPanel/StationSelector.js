@@ -15,7 +15,7 @@ class StationSelector extends Component {
     return (
       <div>
         <label className="label">Select a Station:
-        <span style={{marginLeft: '3px', color: '#3273DC'}}>{getFilteredStations.length}</span></label>
+        <span style={{marginLeft: '3px', color: '#00D1B2'}}>{getFilteredStations.length}</span></label>
         <div className="control">
           <span className="select">
             <select

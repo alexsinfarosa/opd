@@ -5,7 +5,7 @@ export default class CustomLabel extends Component {
     const {x, y, payload} = this.props
     return (
     	<g transform={`translate(${x},${y})`}>
-        <text x={0} y={0} dy={16} fontSize={10} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+        <text x={0} y={0} dy={16} fontSize={10} textAnchor="end" fill="#666" transform="rotate(-30)">{payload.value}</text>
       </g>
     )
   }

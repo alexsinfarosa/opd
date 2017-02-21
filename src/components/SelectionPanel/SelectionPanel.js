@@ -62,8 +62,6 @@ class SelectionPanel extends Component {
     const {pest, station, startDate, endDate} = this.props.store.app
     const hourlyDataFlat = flattenArray(data)
 
-    console.log('Original data:')
-    console.log(hourlyDataFlat)
     console.info(`ALL Missing values: ${hourlyDataFlat.filter(m => m === 'M').length}`)
 
     // Replace ONLY single non consecutive 'M' values
@@ -72,8 +70,6 @@ class SelectionPanel extends Component {
     // Replace consecutive M's values with values from sister station
     const missingValues = hourlyDataWithReplacedValuesFlat.filter(e => e === 'M')
     console.info(`ONLY consecutive M values: ${missingValues.length}`)
-    console.log('after replacing single M')
-    console.log(hourlyDataWithReplacedValuesFlat)
     if(missingValues.length > 0) {
 
         // GET sister station
@@ -87,11 +83,11 @@ class SelectionPanel extends Component {
             sid: `${res[0]} ${res[1]}`,
             sdate: format(startDate, 'YYYY-MM-DD'),
             edate: format(endDate, 'YYYY-MM-DD'),
-            elems: networkTemperatureAdjustment(station.network)
+            elems: networkTemperatureAdjustment(res[1])
           }
 
           // Making the call to the API
-          console.log(`POST request: sid: ${params.sid}, sdate: ${params.sdate}, edate: ${params.edate}, elems: ${params.elems}`)
+          console.log(`Sister POST request: sid: ${params.sid}, sdate: ${params.sdate}, edate: ${params.edate}, elems: ${params.elems}`)
 
 
           // Request the new data from sister station
@@ -99,13 +95,10 @@ class SelectionPanel extends Component {
             .then(res => {
               if(!res.data.hasOwnProperty('error')) {
                 const sisterStationHourlyDataFlat = flattenArray(res.data.data)
-                console.log('from sister')
-                console.log(sisterStationHourlyDataFlat)
-                console.log(sisterStationHourlyDataFlat.filter(e=>e==='M').length)
-                console.log('replaced')
+                console.log(`Sister station missing total values: ${sisterStationHourlyDataFlat.filter(e=>e==='M').length}`)
 
                 hourlyDataWithReplacedValuesFlat = replaceConsecutiveMissingValues(sisterStationHourlyDataFlat, hourlyDataWithReplacedValuesFlat)
-                console.log(hourlyDataWithReplacedValuesFlat)
+                console.log(`After replacing consecutive missing values: ${hourlyDataWithReplacedValuesFlat.filter(e=>e==='M').length}`)
                 const hourlyDataWithReplacedValues = unflattenArray(hourlyDataWithReplacedValuesFlat)
                 this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
                 this.calculateStageToDisplay(pest)

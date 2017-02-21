@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+
 import {
   LineChart,
   Line,
@@ -10,13 +11,14 @@ import {
 } from 'recharts';
 import CustomLabel from './CustomLabel';
 
-import { cumulativeDegreeDayDataGraph } from '../../utils';
+// import { cumulativeDegreeDayDataGraph } from '../../utils';
 
 @inject('store')
 @observer
 export default class ResultsTable extends Component {
+
   render() {
-    const { ACISData, cumulativeDegreeDay } = this.props.store.app;
+    const {cumulativeDegreeDayDataGraph} = this.props.store.app;
     return (
       <div className="columns">
         <div className="column has-text-centered">
@@ -25,7 +27,7 @@ export default class ResultsTable extends Component {
           <LineChart
             width={730}
             height={260}
-            data={cumulativeDegreeDayDataGraph(cumulativeDegreeDay, ACISData)}
+            data={cumulativeDegreeDayDataGraph}
           >
             <XAxis dataKey="Date" tick={<CustomLabel />} />
             <YAxis />

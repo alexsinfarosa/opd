@@ -1,5 +1,3 @@
-import {format} from 'date-fns'
-
 export const states = [
   {postalCode: 'AL', lat: 32.6174, lon: -86.6795, zoom: 7, name: 'Alabama'},
   {postalCode: 'CT', lat: 41.6220, lon: -72.7272, zoom: 8, name: 'Connecticut'},
@@ -77,10 +75,10 @@ export const calculateDegreeDay = (pest, data) => {
   const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
   const base = pest.baseTemp
   const dd = avg.map(val => val-base > 0 ? val-base : 0)
-  console.info(`Min: ${min}`)
-  console.info(`Max: ${max}`)
-  console.info(`Avg: ${avg}`)
-  console.info(`DD: ${dd}`)
+  console.info(`NaN values in Min: ${min.filter(e=>e==='NaN').length}`)
+  console.info(`NaN values in Max: ${max.filter(e=>e==='NaN').length}`)
+  console.info(`NaN values in Avg: ${avg.filter(e=>e==='NaN').length}`)
+  console.info(`NaN values in dd: ${dd.filter(e=>e==='NaN').length}`)
   return dd
 }
 
@@ -111,7 +109,7 @@ export const replaceConsecutiveMissingValues = (sisterStation, currentStation) =
       if(sisterStation[i] !== 'M') {
         arr.push(sisterStation[i])
       } else {
-        arr.push('60') // ------>  FORECAST OPTION 
+        arr.push('60') // ------>  FORECAST OPTION
       }
     } else {
       arr.push(e)
@@ -144,17 +142,6 @@ export const matchIconsToStations = (stations, state) => {
       station.state === state.postalCode || state.postalCode === 'ALL' ? newObj['icon'] = airport : newObj['icon'] = airportGray
       arr.push(newObj)
     }
-  })
-  return arr
-}
-
-export const cumulativeDegreeDayDataGraph = (data2, fakeData) => {
-  const arr = []
-  data2.forEach((e,i) => {
-    const newObj = {}
-    newObj['Date'] = format(fakeData[i][0], 'MMM D')
-    newObj['Accumulated Degree-Days'] = e
-    arr.push(newObj)
   })
   return arr
 }

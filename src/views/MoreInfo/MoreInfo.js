@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {inject, observer} from 'mobx-react';
-
+import './moreInfo.css'
 @inject('store') @observer
 export default class MoreInfo extends Component {
 
   render() {
     return (
+      <div className="wrapper">
     <section className='hero'>
       <div className='hero-body'>
         <div className='container has-text-centered'>
@@ -33,11 +34,12 @@ export default class MoreInfo extends Component {
                 </ol>
               </aside>
             </div>
-
           </div>
+
         </div>
       </div>
     </section>
+    </div>
     )
   }
 }
