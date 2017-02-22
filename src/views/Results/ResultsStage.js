@@ -60,8 +60,8 @@ export default class ResultsHeader extends Component {
             <table className="table is-bordered is-striped">
               <thead>
                 <tr>
-                  <th>Pest Status</th>
-                  <th>Pest Management</th>
+                  <th className="before">Pest Status</th>
+                  <th className="before">Pest Management</th>
                 </tr>
               </thead>
               <tbody>

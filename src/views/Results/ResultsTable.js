@@ -56,8 +56,8 @@ export default class ResultsTable extends Component {
               </tr>
               <tr>
                 <td className="has-text-centered" colSpan="9">
-                  <a
-                    className="button is-primary is-outlined"
+                  <a style={{marginTop: '5px', marginBottom: '5px'}}
+                    className="button is-info is-outlined"
                     onClick={this.handleGraphClick}>
                     {this.state.isGraphDisplayed ? 'Hide' : 'Show'} Accumulated Degree-Days Graph
                   </a>

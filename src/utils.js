@@ -147,11 +147,11 @@ export const matchIconsToStations = (stations, state) => {
 }
 
 // If there are stages chose the one where the current dd value is between ddlo and ddhi
-export const calculateStageToDisplay = (getCumulativeDegreeDay, pest) => {
-  if (getCumulativeDegreeDay.length > 0 && pest.preBiofix.length > 0) {
-    const currentDegreeDayValue = getCumulativeDegreeDay[getCumulativeDegreeDay.length - 6]
-    const selectedStage = pest.preBiofix.filter(stage => (currentDegreeDayValue > stage.ddlo && currentDegreeDayValue < stage.ddhi))[0]
-    return selectedStage
-  }
-  return {}
-}
+// export const calculateStageToDisplay = (getCumulativeDegreeDay, pest) => {
+//   if (getCumulativeDegreeDay.length > 0 && pest.preBiofix.length > 0) {
+//     const currentDegreeDayValue = getCumulativeDegreeDay[getCumulativeDegreeDay.length - 6]
+//     const selectedStage = pest.preBiofix.filter(stage => (currentDegreeDayValue > stage.ddlo && currentDegreeDayValue < stage.ddhi))[0]
+//     return selectedStage
+//   }
+//   return {}
+// }
