@@ -25,7 +25,7 @@ import {
 class SelectionPanel extends Component {
 
   getACISdata = () => {
-    const {pest, station, endDate, startDate} = this.props.store.app
+    const {station, endDate, startDate} = this.props.store.app
     const {router} = this.props.store
     const {store} = this.props
 
@@ -46,7 +46,6 @@ class SelectionPanel extends Component {
         if(!res.data.hasOwnProperty('error')) {
           this.props.store.app.updateACISData(res.data.data)
           this.resultsValues(res.data.data)
-          this.calculateStageToDisplay(pest)
           router.goTo(views.results, {id: 111}, store)
         } else {
           console.log(res.data.error)
@@ -101,7 +100,6 @@ class SelectionPanel extends Component {
                 console.log(`After replacing consecutive missing values: ${hourlyDataWithReplacedValuesFlat.filter(e=>e==='M').length}`)
                 const hourlyDataWithReplacedValues = unflattenArray(hourlyDataWithReplacedValuesFlat)
                 this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
-                this.calculateStageToDisplay(pest)
               } else {
                 console.log(res.data.error)
               }
@@ -120,18 +118,6 @@ class SelectionPanel extends Component {
 
     // Update store with replaced values
     this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, hourlyDataWithReplacedValues))
-  }
-
-  // If there are stages chose the one where the current dd value is between ddlo and ddhi
-  calculateStageToDisplay = (pest) => {
-    const {cumulativeDegreeDay} = this.props.store.app
-    const currentDegreeDayValue = cumulativeDegreeDay[cumulativeDegreeDay.length - 1]
-    if (pest.preBiofix.length > 0) {
-      const selectedStage = pest.preBiofix.filter(stage => (currentDegreeDayValue > stage.ddlo && currentDegreeDayValue < stage.ddhi))
-      this.props.store.app.updateStage(selectedStage[0])
-    } else {
-      this.props.store.app.updateStage({})
-    }
   }
 
   render() {

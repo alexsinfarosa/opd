@@ -42,7 +42,7 @@ class AppStore {
 
   // DATES -----------------------------------------------------------------------
   @observable startDate = '';
-  @observable endDate = new Date();
+  @observable endDate = '';
   @action updateEndDate = e => {
     this.endDate = format(e, 'MM/DD/YYYY');
     this.startDate = `01/01/${getYear(this.endDate)}`;
@@ -56,6 +56,7 @@ class AppStore {
 
   // stage -----------------------------------------------------------------------
   @observable stage = {};
+  @computed get getStage() {return this.stage}
   @action updateStage = d => this.stage = d;
 
   // ACISData --------------------------------------------------------------------
@@ -72,7 +73,7 @@ class AppStore {
     return this.degreeDay
   }
   @action updateDegreeDay = d => this.degreeDay = d;
-  @computed get cumulativeDegreeDay() {
+  @computed get getCumulativeDegreeDay() {
     const results = [];
     this.degreeDay.reduce((prev, curr, i) => results[i] = prev + curr, 0);
     return results;
@@ -82,7 +83,7 @@ class AppStore {
     this.ACISData.forEach((e,i) => {
       const newObj = {}
       newObj['Date'] = format(this.ACISData[i][0], 'MMM D')
-      newObj['Accumulated Degree-Days'] = this.cumulativeDegreeDay[i]
+      newObj['Accumulated Degree-Days'] = this.getCumulativeDegreeDay[i]
       arr.push(newObj)
     })
     return arr

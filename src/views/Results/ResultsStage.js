@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react'
-import { action, computed } from 'mobx'
+import { action, computed, toJS } from 'mobx'
 
 @inject('store') @observer
 export default class ResultsHeader extends Component {
@@ -8,7 +8,7 @@ export default class ResultsHeader extends Component {
   @action setStage = (e) => {
     const { pest } = this.props.store.app
     const selectedStage = pest.preBiofix.filter(stage => stage.stage === e.target.value)[0]
-    this.props.store.app.stage = selectedStage
+    this.props.store.app.updateStage(selectedStage)
   }
 
   @computed get getStageList() {
@@ -19,8 +19,20 @@ export default class ResultsHeader extends Component {
     }
   }
 
+  @computed get getStageToDisplay() {
+    const {getCumulativeDegreeDay, pest} = this.props.store.app
+    if (getCumulativeDegreeDay.length > 0 && pest.preBiofix.length > 0) {
+      const currentDegreeDayValue = getCumulativeDegreeDay[getCumulativeDegreeDay.length - 6]
+      const selectedStage = pest.preBiofix.filter(stage => (currentDegreeDayValue > stage.ddlo && currentDegreeDayValue < stage.ddhi))[0]
+      return selectedStage
+    }
+    return null
+  }
+
   render() {
-    const {stage} = this.props.store.app
+    // const {stage} = this.props.store.app
+    const stage = this.getStageToDisplay;
+    console.log(toJS(stage))
     return (
       <div>
         <div className="columns">
@@ -32,7 +44,7 @@ export default class ResultsHeader extends Component {
               <span className="select">
                 <select
                   onChange={this.setStage}
-                  value={stage ? stage.stage : ''}
+                  value={stage ? stage.stage : 'No Stages'}
                 >
                   <option>Select a stage</option>
                   {this.getStageList}
@@ -53,12 +65,12 @@ export default class ResultsHeader extends Component {
                 </tr>
               </thead>
               <tbody>
-                {stage &&
+
                   <tr>
-                    <td className="has-text-centered">{stage.management}</td>
-                    <td className="has-text-centered">{stage.status}</td>
+                    <td className="has-text-centered">{stage ? stage.management : 'Not available'}</td>
+                    <td className="has-text-centered">{stage ? stage.status : 'Not available'}</td>
                   </tr>
-                }
+
               </tbody>
             </table>
           </div>
