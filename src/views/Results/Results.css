@@ -1,9 +1,11 @@
 .before {
   background: #00D1B2;
+  color: #eee !important;
 }
 
 .after {
   background: #FFDD57;
+  color: #777 !important;
 }
 
 table td,
@@ -21,7 +23,7 @@ table th {
 .table thead th {
   border-width: 0 0 2px;
   text-align: center;
-  color: #363636;
+  color: white;
 }
 
 .center-image {

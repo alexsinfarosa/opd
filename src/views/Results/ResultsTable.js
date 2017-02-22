@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import ResultsGraph from './ResultsGraph'
+import ResultsGraph from './ResultsGraph';
+import _ from 'lodash';
 
 @inject('store')
 @observer
@@ -19,10 +20,14 @@ export default class ResultsTable extends Component {
   render() {
     const {
       pest,
-      degreeDay,
       cumulativeDegreeDay,
-      displayMonth
+      getDate,
+      getDegreeDay
     } = this.props.store.app;
+    
+    const displayMonths = getDate.map(date => <th key={date} className="before">{date}</th>)
+    const displayDegreeDay = getDegreeDay.map((dd,i) => <td key={i}>{dd}</td>)
+    const displayCumulativeDegreeDay = cumulativeDegreeDay.map((cdd,i) => <td key={i}>{cdd}</td>)
 
     return (
       <div className="columns">
@@ -37,39 +42,25 @@ export default class ResultsTable extends Component {
                 <th className="after" colSpan="5"> Ensuing 5 Days </th>
               </tr>
               <tr className="has-text-centered">
-                {displayMonth.map(month => <th key={month} className="before">{month}</th>)}
+                {_.takeRight(displayMonths, 8)}
               </tr>
             </thead>
             <tbody>
               <tr className="has-text-centered">
                 <th>Daily Degree Days (Base {pest.baseTemp}BE)</th>
-                <td>{degreeDay[degreeDay.length - 8]}</td>
-                <td>{degreeDay[degreeDay.length - 7]}</td>
-                <td>{degreeDay[degreeDay.length - 6]}</td>
-                <td>{degreeDay[degreeDay.length - 5]}</td>
-                <td>{degreeDay[degreeDay.length - 4]}</td>
-                <td>{degreeDay[degreeDay.length - 3]}</td>
-                <td>{degreeDay[degreeDay.length - 2]}</td>
-                <td>{degreeDay[degreeDay.length - 1]}</td>
+                {_.takeRight(displayDegreeDay, 8)}
               </tr>
               <tr className="has-text-centered">
                 <th>Accumulation since January 1st</th>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 8]}</td>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 7]}</td>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 6]}</td>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 5]}</td>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 4]}</td>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 3]}</td>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 2]}</td>
-                <td>{cumulativeDegreeDay[cumulativeDegreeDay.length - 1]}</td>
+                {_.takeRight(displayCumulativeDegreeDay, 8)}
               </tr>
               <tr>
                 <td className="has-text-centered" colSpan="9">
-                  <button
-                    className="button is-link"
+                  <a
+                    className="button is-primary is-outlined"
                     onClick={this.handleGraphClick}>
                     {this.state.isGraphDisplayed ? 'Hide' : 'Show'} Accumulated Degree-Days Graph
-                  </button>
+                  </a>
 
                   {this.state.isGraphDisplayed && <ResultsGraph />}
                 </td>

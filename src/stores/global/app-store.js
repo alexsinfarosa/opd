@@ -61,14 +61,16 @@ class AppStore {
   // ACISData --------------------------------------------------------------------
   @observable ACISData = [];
   @action updateACISData = d => this.ACISData = d;
-  @computed get displayMonth() {
+  @computed get getDate() {
     const days = this.ACISData.map(e => e[0])
-    const formattedDays = _.takeRight(days, 8)
-    return formattedDays.map(e => format(e, 'MMM D'))
+    return days.map(e => format(e, 'MMM D'))
   }
 
   // degreeDay -------------------------------------------------------------------
   @observable degreeDay = [];
+  @computed get getDegreeDay() {
+    return this.degreeDay
+  }
   @action updateDegreeDay = d => this.degreeDay = d;
   @computed get cumulativeDegreeDay() {
     const results = [];
@@ -76,8 +78,6 @@ class AppStore {
     return results;
   }
   @computed get cumulativeDegreeDayDataGraph() {
-    console.log(this.ACISData.length)
-    console.log(this.cumulativeDegreeDay.length)
     const arr = []
     this.ACISData.forEach((e,i) => {
       const newObj = {}
