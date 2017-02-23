@@ -75,10 +75,11 @@ export const calculateDegreeDay = (pest, data) => {
   const avg = min.map((val,i) => (Math.round((val + max[i])/2)))
   const base = pest.baseTemp
   const dd = avg.map(val => val-base > 0 ? val-base : 0)
-  console.info(`NaN values in Min: ${min.filter(e=>e==='NaN').length}`)
-  console.info(`NaN values in Max: ${max.filter(e=>e==='NaN').length}`)
-  console.info(`NaN values in Avg: ${avg.filter(e=>e==='NaN').length}`)
-  console.info(`NaN values in dd: ${dd.filter(e=>e==='NaN').length}`)
+  console.log(`min: ${min}`)
+  console.log(`min: ${min.length}`)
+  console.log(`max: ${max}`)
+  console.log(`avg: ${avg}`)
+  console.log(`dd: ${dd}`)
   return dd
 }
 
@@ -105,12 +106,8 @@ export const replaceSingleMissingValues = (data) => {
 export const replaceConsecutiveMissingValues = (sisterStation, currentStation) => {
   const arr = []
   currentStation.forEach((e, i) => {
-    if(e === 'M') {
-      if(sisterStation[i] !== 'M') {
-        arr.push(sisterStation[i])
-      } else {
-        arr.push('60') // ------>  FORECAST OPTION
-      }
+    if(e === 'M' && sisterStation[i] !== 'M') {
+      arr.push(sisterStation[i])
     } else {
       arr.push(e)
     }

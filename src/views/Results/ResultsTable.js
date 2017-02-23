@@ -25,7 +25,7 @@ export default class ResultsTable extends Component {
       getDegreeDay
     } = this.props.store.app;
 
-    const displayMonths = getDate.map(date => <th key={date} className="before">{date}</th>)
+    const displayMonths = getDate.map(date => <th key={date} className="months">{date}</th>)
     const displayDegreeDay = getDegreeDay.map((dd,i) => <td key={i}>{dd}</td>)
     const displayCumulativeDegreeDay = getCumulativeDegreeDay.map((cdd,i) => <td key={i}>{cdd}</td>)
 

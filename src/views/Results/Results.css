@@ -36,3 +36,8 @@ table th {
   justify-content: center;
   align-items: center;
 }
+
+.stageHeader, .months {
+  background: #4D5057;
+  color: white !important;
+}

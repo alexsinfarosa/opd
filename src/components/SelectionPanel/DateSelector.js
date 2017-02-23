@@ -22,7 +22,7 @@ class DateSelector extends Component {
               altFormat: 'F j, Y',
               inline: false, // show the calendar inline
               altInputClass: 'input input-calender',
-              defaultDate: new Date('2016-12-31')
+              defaultDate: new Date('2016-01-20')
             }}
             // placeholder="Select Date"
             onChange={updateEndDate}

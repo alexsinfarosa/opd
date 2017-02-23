@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react'
-import { action, computed, toJS } from 'mobx'
+import { action, computed} from 'mobx'
 
 @inject('store') @observer
 export default class ResultsHeader extends Component {
@@ -32,7 +32,7 @@ export default class ResultsHeader extends Component {
   render() {
     // const {stage} = this.props.store.app
     const stage = this.getStageToDisplay;
-    console.log(toJS(stage))
+    // console.log(toJS(stage))
     return (
       <div>
         <div className="columns">
@@ -60,8 +60,8 @@ export default class ResultsHeader extends Component {
             <table className="table is-bordered is-striped">
               <thead>
                 <tr>
-                  <th className="before">Pest Status</th>
-                  <th className="before">Pest Management</th>
+                  <th className="stageHeader">Pest Status</th>
+                  <th className="stageHeader">Pest Management</th>
                 </tr>
               </thead>
               <tbody>

@@ -12,6 +12,7 @@ class AppStore {
     this.pest = this.pests.filter(pest => pest.informalName === e.target.value)[
       0
     ];
+    localStorage.setItem('pest', JSON.stringify(this.pest)); // TESTING...
   };
 
   // state -----------------------------------------------------------------------

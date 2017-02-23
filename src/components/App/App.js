@@ -12,6 +12,7 @@ import './app.css';
 // components
 import AppHeader from '../AppHeader/AppHeader';
 import SelectionPanel from '../SelectionPanel/SelectionPanel';
+import Test from '../../components/SelectionPanel/Test'
 
 // devTools
 import DevTools from 'mobx-react-devtools';
@@ -33,6 +34,7 @@ class AppComponent extends Component {
   getLocalStorage = () => {
     this.props.store.app.state = JSON.parse(localStorage.getItem('state'));
     this.props.store.app.station = JSON.parse(localStorage.getItem('station'));
+    this.props.store.app.pest = JSON.parse(localStorage.getItem('pest')); // TESTING...
     this.props.store.app.updateFilteredStations();
     this.props.store.router.goTo(views.map);
   };
@@ -64,7 +66,7 @@ class AppComponent extends Component {
           <div className="container">
 
             {/* FOR TESTING ONLY */}
-            {/* <Test /> */}
+            <Test />
 
             {/* HEADER */}
             <div className="columns">
