@@ -33,6 +33,12 @@ export const avgTwoStringNumbers = (a, b) => {
   return (Math.round((aNum + bNum) / 2)).toString()
 }
 
+export const avgTwoStringNumbersWeighted = (a, b) => {
+  const aNum = parseFloat(a)
+  const bNum = parseFloat(b)
+  return (Math.round((aNum + aNum + bNum) / 3)).toString()
+}
+
 // Adjust Temperature parameter and Michigan network id
 export const networkTemperatureAdjustment = (network) => {
   // Handling different temperature parameter for each network
@@ -97,6 +103,29 @@ export const replaceSingleMissingValues = (data) => {
       return data[i-1]
     } else if (val === 'M' && data[i-1] !== 'M' && data[i+1] !== 'M') {
       return avgTwoStringNumbers(data[i-1], data[i+1])
+    } else {
+      return val
+    }
+  })
+}
+
+export const weightedAverage = () => {
+  // the array has only consecutive missing values
+  // the array length is at least 3
+  const data = ['M','M','M',1,2,'M','M',3,5,4,'M','M']
+  return data.map((val,i) => {
+    if(i === 0 && val === 'M' && data[i+1] === 'M') {
+      return data[i+2]
+    } else if(i === 1 && val === 'M') {
+      return data[i+1]
+    } else if (i === (data.length - 2) && val === 'M') {
+      return data[i-1]
+    } else if(i === data.length - 1 && val === 'M') {
+      return data[i-2]
+    } else if (val === 'M' && data[i-1] !== 'M' && data[i+1] === 'M') {
+      return avgTwoStringNumbersWeighted(data[i-1], data[i+2])
+    } else if(val === 'M' && data[i-1] === 'M' && data[i+1] !== 'M') {
+      return avgTwoStringNumbersWeighted(data[i-3], data[i+1])
     } else {
       return val
     }

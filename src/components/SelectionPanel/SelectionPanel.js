@@ -18,12 +18,15 @@ import {
   unflattenArray,
   calculateDegreeDay,
   replaceSingleMissingValues,
-  replaceConsecutiveMissingValues
+  replaceConsecutiveMissingValues,
+  weightedAverage
 } from '../../utils';
 
 @inject('store') @observer
 class SelectionPanel extends Component {
-
+  state = {
+    currentYear: new Date().getFullYear()
+  }
   getACISdata = () => {
     const {station, endDate, startDate} = this.props.store.app
     const {router} = this.props.store
@@ -58,12 +61,14 @@ class SelectionPanel extends Component {
   }
 
   replaceMissingValues = (data) => {
+    console.log('------------------------------------------------------------------------')
     const {pest, station, startDate, endDate} = this.props.store.app
     const dataFlat = flattenArray(data)
-
+    console.log(`current station: ${dataFlat.filter(e => e === 'M').length}`)
+    console.log(dataFlat.toString())
     // Replace ONLY single non consecutive 'M' values
     const resultsFlat = replaceSingleMissingValues(dataFlat)
-    console.log(resultsFlat.filter(e => e === 'M').length)
+    console.log(`current station after replaceSingleMissingValues: ${resultsFlat.filter(e => e === 'M').length}`)
     console.log(resultsFlat.toString())
     // Update store with replaced values
     if (resultsFlat.filter(e => e === 'M').length === 0) {
@@ -91,9 +96,12 @@ class SelectionPanel extends Component {
           .then(res => {
             if(!res.data.hasOwnProperty('error')) {
               const sisterFlat = flattenArray(res.data.data)
+              console.log(`sister flat: ${sisterFlat.filter(e => e === 'M').length}`)
+              console.log(sisterFlat.toString())
+
               const currentFlat = replaceConsecutiveMissingValues(sisterFlat, resultsFlat)
 
-              console.log(currentFlat.filter(e => e === 'M').length)
+              console.log(`after replaceConsecutiveMissingValues: ${currentFlat.filter(e => e === 'M').length}`)
               console.log(currentFlat.toString())
 
 
@@ -101,16 +109,44 @@ class SelectionPanel extends Component {
                 this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, unflattenArray(currentFlat)))
                 return
               } else {
-                return currentFlat
+                if(endDate.slice(0,4) === this.state.currentYear) {
+                  return currentFlat
+                } else {
+                  // const resultsFlat = replaceSingleMissingValues(currentFlat)
+                }
               }
             } else {
               console.log(res.data.error)
             }
           })
           // FORECAST------------------------------------------------------------------------
-          .then(currentFlat => {
-            if(currentFlat) {
-              console.log(currentFlat)
+          .then(sisterData => {
+            // console.log(currentFlat.toString())
+            const sDate = format(startDate, 'YYYY-MM-DD')
+            const eDate = format(endDate, 'YYYY-MM-DD')
+
+            if(sisterData) {
+              axios.get(`http://newatest.nrcc.cornell.edu/newaUtil/getFcstData/${station.id}/${station.network}/temp/${sDate}/${eDate}`)
+              .then(res => {
+                if(!res.data.hasOwnProperty('error')) {
+                  const forecastFlat = flattenArray(res.data.data)
+                  console.log(`forecast flat: ${forecastFlat.filter(e => e === 'M').length}`)
+                  console.log(forecastFlat.toString())
+
+                  const currentFlat = replaceConsecutiveMissingValues(forecastFlat, forecastFlat)
+
+                  console.log(`after replaceConsecutiveMissingValues: ${currentFlat.filter(e => e === 'M').length}`)
+                  console.log(currentFlat.toString())
+
+
+                  if(currentFlat.filter(e => e === 'M').length === 0) {
+                    this.props.store.app.updateDegreeDay(calculateDegreeDay(pest, unflattenArray(currentFlat)))
+                    return
+                  } else {
+                    return currentFlat
+                  }
+                }
+              })
             }
           })
           .catch(err => {
@@ -126,6 +162,7 @@ class SelectionPanel extends Component {
 
 
   render() {
+    console.log(weightedAverage())
     const {getAllRequiredFields} = this.props.store.app
     return (
       <div className='box'>
