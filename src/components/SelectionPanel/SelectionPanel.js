@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import views from 'config/views';
 // import { toJS } from 'mobx'
 import axios from 'axios';
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
 
 import PestSelector from './PestSelector';
 import StateSelector from './StateSelector';
@@ -18,15 +18,15 @@ import {
   calculateDegreeDay,
   replaceSingleMissingValues,
   replaceConsecutiveMissingValues,
-  weightedAverage,
-  removedMissingValues
+  // weightedAverage,
+  calculateMissingValues
 } from '../../utils';
 
 @inject('store')
 @observer
 class SelectionPanel extends Component {
   state = {
-    currentYear: new Date().getFullYear()
+    currentYear: format(new Date(), 'YYYY')
   };
   getACISdata = () => {
     const { station, endDate, startDate } = this.props.store.app;
@@ -78,7 +78,7 @@ class SelectionPanel extends Component {
       `current station after replaceSingleMissingValues: ${resultsFlat.filter(e =>
           e === 'M').length}`
     );
-    // console.log(resultsFlat.toString());
+    console.log('current: ' + resultsFlat.toString());
     // Update store with replaced values
     if (resultsFlat.filter(e => e === 'M').length === 0) {
       this.props.store.app.updateDegreeDay(
@@ -104,12 +104,16 @@ class SelectionPanel extends Component {
           edate: format(endDate, 'YYYY-MM-DD'),
           elems: networkTemperatureAdjustment(res[1])
         };
+        // Making the call to the API
+        console.log(
+          `First POST request: sid: ${params.sid}, sdate: ${params.sdate}, edate: ${params.edate}, elems: ${params.elems}`
+        );
         axios
           .post('http://data.test.rcc-acis.org/StnData', params)
           .then(res => {
             if (!res.data.hasOwnProperty('error')) {
               const sisterFlat = flattenArray(res.data.data);
-              // console.log(sisterFlat.toString());
+              console.log('sister: ' + sisterFlat.toString());
 
               const currentFlat = replaceConsecutiveMissingValues(
                 sisterFlat,
@@ -117,10 +121,10 @@ class SelectionPanel extends Component {
               );
 
               console.log(
-                `after replaceConsecutiveMissingValues: ${currentFlat.filter(e =>
+                `after replacemet with sister station: ${currentFlat.filter(e =>
                     e === 'M').length}`
               );
-              console.log(currentFlat.toString());
+              console.log('current data after replacing data from sister: ' + currentFlat.toString());
 
               if (currentFlat.filter(e => e === 'M').length === 0) {
                 this.props.store.app.updateDegreeDay(
@@ -128,25 +132,44 @@ class SelectionPanel extends Component {
                 );
                 return;
               } else {
-                if (endDate.slice(0, 4) === this.state.currentYear) {
+                if (format(subDays(endDate, 5), 'YYYY') === this.state.currentYear) {
+                  console.log('inside forecast')
                   return currentFlat;
                 } else {
-                  let results = [];
-                  results = weightedAverage(currentFlat);
-                  if (results.filter(e => e === 'M').length !== 0) {
-                    results = weightedAverage(results);
-                  }
-                  if (results.filter(e => e === 'M').length !== 0) {
-                    results = weightedAverage(results);
-                  }
-                  if (results.filter(e => e === 'M').length !== 0) {
-                    // this.props.store.app.setMissingValue(
-                    //   removedMissingValues(results)
-                    // );
-                    this.props.store.app.updateDegreeDay(
-                      calculateDegreeDay(pest, unflattenArray(resultsFlat))
+
+                  let results = []
+                  if(currentFlat.filter(e => e === 'M').length !== 0) {
+                    results = unflattenArray(currentFlat)
+                    this.props.store.app.setMissingValue(
+                      calculateMissingValues(results)
                     );
+                    this.props.store.app.updateDegreeDay(calculateDegreeDay(pest,
+                      results));
                   }
+
+                  // let results = [];
+                  // results = weightedAverage(currentFlat);
+                  // if (results.filter(e => e === 'M').length !== 0) {
+                  //   results = weightedAverage(results);
+                  // }
+                  // console.log(
+                  //   `after weightedAverage: ${results.filter(e =>
+                  //       e === 'M').length}`
+                  // );
+                  // console.log(results.toString());
+                  //
+                  // if (results.filter(e => e === 'M').length !== 0) {
+                  //   // this.props.store.app.setMissingValue(
+                  //   //   calculateMissingValues(unflattenArray(results))
+                  //   // );
+                  //   results = unflattenArray(results)
+                  //   console.log(results)
+                  //   const removedMissingValues = results.map(day => day.filter(e => e !== 'M'))
+                  //   console.log(removedMissingValues)
+                  //   this.props.store.app.updateDegreeDay(
+                  //     calculateDegreeDay(pest, removedMissingValues)
+                  //   );
+                  // }
                 }
               }
             } else {
@@ -158,6 +181,7 @@ class SelectionPanel extends Component {
             // console.log(currentFlat.toString())
             const sDate = format(startDate, 'YYYY-MM-DD');
             const eDate = format(endDate, 'YYYY-MM-DD');
+            console.log('sisterData: ' + sisterData.toString())
 
             if (sisterData) {
               axios
@@ -171,15 +195,15 @@ class SelectionPanel extends Component {
                       `forecast flat: ${forecastFlat.filter(e =>
                           e === 'M').length}`
                     );
-                    console.log(forecastFlat.toString());
+                    console.log(`forecast data: ${forecastFlat.toString()}`)
 
                     const currentFlat = replaceConsecutiveMissingValues(
                       forecastFlat,
-                      forecastFlat
+                      sisterData
                     );
 
                     console.log(
-                      `after replaceConsecutiveMissingValues: ${currentFlat.filter(e =>
+                      `after replacement with forecast Data there are: ${currentFlat.filter(e =>
                           e === 'M').length}`
                     );
                     console.log(currentFlat.toString());
@@ -188,9 +212,17 @@ class SelectionPanel extends Component {
                       this.props.store.app.updateDegreeDay(
                         calculateDegreeDay(pest, unflattenArray(currentFlat))
                       );
-                      return;
                     } else {
-                      return currentFlat;
+
+                      let results = []
+                      if(currentFlat.filter(e => e === 'M').length !== 0) {
+                        results = unflattenArray(currentFlat)
+                        this.props.store.app.setMissingValue(
+                          calculateMissingValues(results)
+                        );
+                        this.props.store.app.updateDegreeDay(calculateDegreeDay(pest,
+                          results));
+                      }
                     }
                   }
                 });

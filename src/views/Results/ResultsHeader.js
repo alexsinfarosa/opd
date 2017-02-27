@@ -14,8 +14,8 @@ export default class ResultsHeader extends Component {
             <strong>{pest.informalName}</strong> Results for <strong>{station.name}</strong>
           </h1>
           <h2 className="subtitle is-6">
-            Accumulated Degree Days (<strong>{pest.baseTemp}°F</strong>) <strong>{startDate}</strong> through <strong>{displayEndDate}</strong>: <strong>{getCumulativeDegreeDay[getCumulativeDegreeDay.length - 6]}</strong>
-            ({missingValue} days missing)
+            Accumulated Degree Days (<strong>{pest.baseTemp}°F</strong>) <strong>{startDate}</strong> through <strong>{displayEndDate}</strong>: <strong>{getCumulativeDegreeDay[getCumulativeDegreeDay.length - 6]} </strong>
+            ({missingValue} {missingValue > 1 ? 'days' : 'day'} missing)
           </h2>
         </div>
       </div>

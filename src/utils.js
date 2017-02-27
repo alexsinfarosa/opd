@@ -163,25 +163,53 @@ export const unflattenArray = data => {
 
 // compute degree days
 export const calculateDegreeDay = (pest, data) => {
+  console.log(`number of days: ${flattenArray(data).length}`)
+  
   const cleanedData = data.map(day => day.filter(e => e !== 'M'))
-  const min = cleanedData.map(day => Math.min(...day))
-  const max = cleanedData.map(day => Math.max(...day))
+  const removedMissingDays = cleanedData.filter(day => day.length !== 0)
+
+  const min = removedMissingDays.map(day => Math.min(...day))
+  const max = removedMissingDays.map(day => Math.max(...day))
   const avg = min.map((val, i) => Math.round((val + max[i]) / 2))
   const base = pest.baseTemp
   const dd = avg.map(val => val - base > 0 ? val - base : 0)
   console.log(`min: ${min}`)
   console.log(`min: ${min.length}`)
   console.log(`max: ${max}`)
+  console.log(`max: ${max.length}`)
   console.log(`avg: ${avg}`)
+  console.log(`avg: ${avg.length}`)
   console.log(`dd: ${dd}`)
+  console.log(`dd: ${dd.length}`)
   return dd
 }
 
-export const removedMissingValues = data => {
-  const removed = data.map(day => day.filter(e => e !== 'M'))
-  let count = 0
-  removed.map(day => day.length < 24 ? count++ : null)
-  return count
+// compute degree days
+// export const calculateDegreeDay = (pest, data) => {
+//   const cleanedData = data.map(day => day.filter(e => e !== 'M'))
+//
+//   let arr = []
+//   cleanedData.map(day => {
+//     if(day.length > 0) {
+//       const min = day.map(day => Math.min(...day))
+//       const max = day.map(day => Math.max(...day))
+//       const avg = min.map((val, i) => Math.round((val + max[i]) / 2))
+//       const base = pest.baseTemp
+//       const dd = avg.map(val => val - base > 0 ? val - base : 0)
+//       // console.log(`min: ${min}`)
+//       // console.log(`max: ${max}`)
+//       // console.log(`avg: ${avg}`)
+//       // console.log(`dd: ${dd}`)
+//       arr.push(dd)
+//     }
+//   })
+//   return arr
+// }
+
+export const calculateMissingValues = data => {
+  const cleanedData = data.map(day => day.filter(e => e !== 'M'))
+  const missingDays = cleanedData.filter(day => day.length === 0)
+  return missingDays.length
 }
 
 export const calculateCumulativeDegreeDay = degreeDayData => {
