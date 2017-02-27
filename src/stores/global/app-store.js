@@ -90,6 +90,10 @@ class AppStore {
     return arr
   }
 
+  // MissingValues------------------------------------------------------------------
+  @observable missingValue = 0
+  @action setMissingValue = d => this.missingValue = d
+
   // ActiveLinks -------------------------------------------------------------------
   @observable path = '/';
   @action updatePath = d => this.path = d;
