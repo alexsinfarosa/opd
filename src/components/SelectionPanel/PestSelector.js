@@ -25,14 +25,14 @@ class PestSelector extends Component {
 
   render () {
     // console.log(mobx.toJS(this.props.store.app.pest
-    
+
     const {pests} = this.props.store.app;
     const pestList = pests.map(pest =>
       <option key={pest.id} value={pest.informalName}>{pest.informalName}</option>
     )
 
     let defaultOption = <option>Select Pest</option>
-    if(this.state.isDisabled) {
+    if(this.state.isDisabled || this.state.pest !== '') {
       defaultOption = null
     }
 
