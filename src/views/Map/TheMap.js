@@ -48,9 +48,19 @@ export default class TheMap extends Component {
         ref='map'
         center={Object.keys(state).length === 0 ? [42.9543,-75.5262] : [state.lat,state.lon]}
         zoom={Object.keys(state).length === 0 ? 6 : state.zoom}>
-      <TileLayer
+      {/* <TileLayer
         attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+      /> */}
+      {/* <TileLayer
+        attribution='Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
+        url='http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png'
+      /> */}
+      <TileLayer
+        attribution='Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri'
+
+        url='http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}'
       />
       {MarkerList}
       </Map>

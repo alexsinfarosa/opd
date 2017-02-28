@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import ResultsGraph from './ResultsGraph';
 import _ from 'lodash';
+import { format, subDays } from 'date-fns';
+
 
 @inject('store')
 @observer
 export default class ResultsTable extends Component {
 
   state = {
-    isGraphDisplayed: false
+    isGraphDisplayed: false,
+    currentYear: format(new Date(), 'YYYY')
   }
 
   handleGraphClick = () => {
    this.setState(prevState => ({
      isGraphDisplayed: !prevState.isGraphDisplayed
    }));
+
  }
 
   render() {
@@ -22,8 +26,25 @@ export default class ResultsTable extends Component {
       pest,
       getCumulativeDegreeDay,
       getDate,
-      getDegreeDay
+      getDegreeDay,
+      endDate,
+      station
     } = this.props.store.app;
+
+    let HeaderTable = null
+    if(this.state.currentYear === format(subDays(endDate, 5), 'YYYY')) {
+
+        HeaderTable =
+        <th className="after" colSpan="5"> 5 Days forecasts
+          <a
+            target="_blank"
+            href={`http://forecast.weather.gov/MapClick.php?textField1=${station.lat}&textField2=${station.lon}`}
+            className="button is-small is-pulled-right">Forecast Details
+          </a>
+        </th>
+    } else {
+      HeaderTable = <th className="after" colSpan="5"> Ensuing 5 Days</th>
+    }
 
     const displayMonths = getDate.map(date => <th key={date} className="months">{date}</th>)
     const displayDegreeDay = getDegreeDay.map((dd,i) => <td key={i}>{dd}</td>)
@@ -39,7 +60,7 @@ export default class ResultsTable extends Component {
                 <th className="before">Past</th>
                 <th className="before">Past</th>
                 <th className="before">Current</th>
-                <th className="after" colSpan="5"> Ensuing 5 Days </th>
+                {HeaderTable}
               </tr>
               <tr className="has-text-centered">
                 {_.takeRight(displayMonths, 8)}

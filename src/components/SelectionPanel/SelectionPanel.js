@@ -181,7 +181,6 @@ class SelectionPanel extends Component {
             // console.log(currentFlat.toString())
             const sDate = format(startDate, 'YYYY-MM-DD');
             const eDate = format(endDate, 'YYYY-MM-DD');
-            console.log('sisterData: ' + sisterData.toString())
 
             if (sisterData) {
               axios

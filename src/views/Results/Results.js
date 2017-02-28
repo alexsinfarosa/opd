@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 
 // Images
 import newaPic from './images/newa_logo.jpg';
-import pmepPic from './images/pmep_logo.jpg';
 import acisPic from './images/PoweredbyACIS_NRCC.jpg';
 
 // Components
@@ -52,7 +51,7 @@ export default class Results extends Component {
         <div className="hero-foot">
           <div className="columns">
 
-            <div className="column is-one-third">
+            <div className="column is-one-half">
               <figure className="image is-64x64 center-image">
                 <a href="http://newa.cornell.edu/">
                   <img src={newaPic} alt="newa" />
@@ -60,14 +59,8 @@ export default class Results extends Component {
               </figure>
 
             </div>
-            <div className="column is-one-third">
-              <figure className="image is-64x64 center-image">
-                <a href="http://treefruitipm.info/">
-                  <img src={pmepPic} alt="pmep" />
-                </a>
-              </figure>
-            </div>
-            <div className="column is-one-third">
+
+            <div className="column is-one-half">
               <figure className="image is-64x64 center-image">
                 <a href="http://www.rcc-acis.org/">
                   <img src={acisPic} alt="acis" />

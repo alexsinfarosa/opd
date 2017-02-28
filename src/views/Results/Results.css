@@ -1,11 +1,13 @@
 .before {
   background: #00D1B2;
   color: #eee !important;
+  line-height: 1.7;
 }
 
 .after {
   background: #FFDD57;
   color: #777 !important;
+  line-height: 1.7;
 }
 
 table td,
