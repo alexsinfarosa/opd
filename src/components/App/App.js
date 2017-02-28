@@ -34,7 +34,7 @@ class AppComponent extends Component {
   getLocalStorage = () => {
     this.props.store.app.state = JSON.parse(localStorage.getItem('state'));
     this.props.store.app.station = JSON.parse(localStorage.getItem('station'));
-    this.props.store.app.pest = JSON.parse(localStorage.getItem('pest')); // TESTING...
+    // this.props.store.app.pest = JSON.parse(localStorage.getItem('pest')); // TESTING...
     this.props.store.app.updateFilteredStations();
     this.props.store.router.goTo(views.map);
   };
