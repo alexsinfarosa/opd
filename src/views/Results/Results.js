@@ -11,7 +11,7 @@ import ResultsTable from './ResultsTable';
 import ResultsStage from './ResultsStage';
 
 // style
-import './results.css';
+import './Results.css';
 
 @inject('store')
 @observer
