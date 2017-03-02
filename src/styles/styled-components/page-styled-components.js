@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import flex from 'styles/flex';
+// import flex from '../flex.js';
 
 export const Page = styled.div`
-    ${flex.vertical}
-    flex: 1;
-    min-width: 100%;
-    position: relative;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgreen;
 `;
 
 export const Wrapper = styled.div`

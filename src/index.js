@@ -1,26 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-//components
-import App from 'components/App/App.js';
+// Components
+import App from './components/App/App.js';
 
+// Style
 //style
-// import 'styles/css/index.css';
-// import 'normalize.css';
-import 'bulma/css/bulma.css';
+import './index.css';
+import 'normalize.css';
 
 //mobx
-import store from 'stores/store';
+import store from './stores'
 import {Provider} from 'mobx-react';
 
-//router
-import {startRouter} from 'mobx-router';
-import views from 'config/views';
-startRouter(views, store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <App/>
   </Provider>,
   document.getElementById('root')
 );

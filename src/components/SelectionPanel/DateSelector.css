@@ -6,10 +6,10 @@ input.input-calender {
   border-radius: 3px;
   box-shadow: none;
   display: inline-flex;
-  font-size: 1rem;
-  height: 2.285em;
+  font-size: .8rem;
+  height: 1.45em;
   justify-content: flex-start;
-  line-height: 1.5;
+  line-height: 1;
   padding-left: 0.75em;
   padding-right: 0.75em;
   position: relative;
@@ -17,7 +17,9 @@ input.input-calender {
   background-color: white;
   border: 1px solid #dbdbdb;
   color: #363636;
-  max-width: 190px;
+  max-width: 120px;
+  border-radius: 5px;
+  margin-top: 5px;
 
 }
 
@@ -129,7 +131,7 @@ input.input-calender {
 }
 
 .flatpickr-calendar.arrowTop:after {
-    border-bottom-color: #00D1B2
+    border-bottom-color: #C28740
 }
 
 .flatpickr-calendar.arrowBottom:after, .flatpickr-calendar.arrowBottom:before {
@@ -141,7 +143,7 @@ input.input-calender {
 }
 
 .flatpickr-calendar.arrowBottom:after {
-    border-top-color: #00D1B2
+    border-top-color: #C28740
 }
 
 .flatpickr-wrapper {
@@ -151,7 +153,7 @@ input.input-calender {
 
 .flatpickr-month {
     border-radius: 5px 5px 0 0;
-    background: #00D1B2;
+    background: #C28740;
     color: #fff;
     fill: #fff;
     height: 28px;
@@ -352,7 +354,7 @@ input.input-calender {
 }
 
 .flatpickr-weekdays {
-    background: #00D1B2;
+    background: #C28740;
     text-align: center;
     overflow: hidden
 }
@@ -420,9 +422,9 @@ input.input-calender {
 }
 
 .flatpickr-day.endRange, .flatpickr-day.endRange.nextMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.endRange:focus, .flatpickr-day.endRange:hover, .flatpickr-day.selected, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.selected:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.startRange:focus, .flatpickr-day.startRange:hover {
-    background: #00D1B2;
+    background: #C28740;
     color: #fff;
-    border-color: #00D1B2
+    border-color: #C28740
 }
 
 .flatpickr-day.endRange.startRange, .flatpickr-day.selected.startRange, .flatpickr-day.startRange.startRange {
@@ -455,7 +457,7 @@ span.flatpickr-weekday {
     color: rgba(0, 0, 0, .54);
     height: 27.333333333333332px;
     line-height: 24px;
-    background: #00D1B2;
+    background: #C28740;
     text-align: center;
     display: block;
     float: left;

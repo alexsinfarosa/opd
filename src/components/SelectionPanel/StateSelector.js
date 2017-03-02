@@ -1,38 +1,58 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 // import mobx from 'mobx';
-import views from 'config/views';
+
+// Utilities
 import {states} from '../../utils'
+
+// styled-components
+import {Select, Selector} from './styles'
 
 @inject('store') @observer
 class StateSelector extends Component {
 
-  submitToMap = (e) => {
-    this.props.store.app.updateState(e)
-    this.props.store.app.updateFilteredStations()
-    this.props.store.router.goTo(views.map)
+  componentDidMount() {
+    const state = JSON.parse(localStorage.getItem('state'))
+    if (state) {
+      this.props.store.app.setState(state)
+      this.setState({state})
+    }
+  }
+
+  state = {
+    state: '',
+    isDisabled: false
+  }
+
+  handleChange = e => {
+    this.setState({isDisabled: true})
+    this.props.store.app.setState(e.target.value)
+    // got to Map View
   }
 
   render () {
     // console.log(mobx.toJS(this.props.store.app.state))
+
     const stateList = states.map(state =>
-      <option key={state.postalCode}>{state.name}</option>)
+      <option key={state.postalCode}>{state.name}</option>
+    )
+
+    let defaultOption = <option>Select State</option>
+    if(this.state.isDisabled || this.state.state !== '') {
+      defaultOption = null
+    }
+
     return (
-      <div>
-        <label className="label">Select a State:</label>
-        <div className="control">
-          <span className="select">
-            <select
-              value={this.props.store.app.state.name}
-              onChange={this.submitToMap}
-              defaultValue="Select State"
-            >
-              <option disabled="disabled">Select State</option>
-              {stateList}
-            </select>
-          </span>
-        </div>
-      </div>
+      <Selector>
+        <label>Select a State:</label>
+        <Select
+          value={this.props.store.app.state.name}
+          onChange={this.handleChange}
+        >
+          {defaultOption}
+          {stateList}
+        </Select>
+      </Selector>
     )
   }
 }

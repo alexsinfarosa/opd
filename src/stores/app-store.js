@@ -1,59 +1,63 @@
 import { observable, action, computed } from 'mobx';
-import pestData from '../../../public/pestData.json';
-import { states, matchIconsToStations } from '../../utils';
+import pestData from '../../public/pestData.json';
+import { states, matchIconsToStations } from '../utils';
 import { format, getYear, isBefore, addDays } from 'date-fns';
 import _ from 'lodash';
 
-class AppStore {
+export default class AppStore {
   // pest ------------------------------------------------------------------------
   @observable pests = pestData;
   @observable pest = {};
-  @action setPest = e => {
-    this.pest = this.pests.filter(pest => pest.informalName === e.target.value)[
+  @action setPest = informalName => {
+    this.pest = this.pests.filter(pest => pest.informalName === informalName)[
       0
     ];
-    localStorage.setItem('state', JSON.stringify(this.state));
+    localStorage.setItem('pest', JSON.stringify(informalName));
   };
 
   // state -----------------------------------------------------------------------
   @observable state = {};
-  @action updateState = e => {
-    this.state = states.filter(state => state.name === e.target.value)[0];
-    localStorage.setItem('state', JSON.stringify(this.state));
+  @action setState = stateName => {
+    this.state = states.filter(state => state.name === stateName)[0];
+    localStorage.setItem('state', JSON.stringify(stateName));
   };
 
   // stations --------------------------------------------------------------------
   @observable stations = [];
-  @observable filteredStations = [];
-  @action updateFilteredStations = () => {
-    this.filteredStations = matchIconsToStations(this.stations, this.state);
-  };
-  @computed get getFilteredStations() {
+  @action setStations = d => this.stations = d;
+  @computed get stationsWithMatchedIcons () {
+    return (
+      matchIconsToStations(this.stations, this.state)
+    )
+  }
+  @computed get getCurrentStateStations() {
     return this.stations.filter(
       station => station.state === this.state.postalCode
     );
   }
   @observable station = {};
-  @action updateStation = e => {
+  @action setStation = stationName => {
     this.station = this.stations.filter(
-      station => station.name === e.target.value
-    )[0];
-    localStorage.setItem('station', JSON.stringify(this.station));
+      station => station.name === stationName)[0];
+      localStorage.setItem('station', JSON.stringify(stationName));
   };
 
   // DATES -----------------------------------------------------------------------
-  @observable startDate = '';
-  @observable endDate = '';
-  @action updateEndDate = e => {
-    this.endDate = format(e, 'MM/DD/YYYY');
-    this.startDate = `01/01/${getYear(this.endDate)}`;
-
-    // No Forecast
-    if (isBefore(this.endDate, new Date())) {
-      const endDatePlusFiveDays = addDays(this.endDate, 5);
-      this.endDate = format(endDatePlusFiveDays, 'MM/DD/YYYY');
-    }
-  };
+  @observable endDate = new Date();
+  @action setEndDate = d => {
+    this.endDate = format(d, 'YYYY/MM/DD')
+  }
+  @observable startDate = `${format(this.endDate, 'YYYY')}/01/01`;
+  // @computed get getEndDate () {
+  //   return (
+  //     // No Forecast
+  //     // if (isBefore(this.endDate, new Date())) {
+  //     //   const endDatePlusFiveDays = addDays(this.endDate, 5);
+  //     //   this.endDate = format(endDatePlusFiveDays, 'MM/DD/YYYY');
+  //     // }
+  //     format(this.startDate, 'MM/DD/YYYY')
+  //   )
+  // }
 
   // stage -----------------------------------------------------------------------
   @observable stage = {};
@@ -105,5 +109,3 @@ class AppStore {
     ).length === 0;
   }
 }
-
-export default AppStore;

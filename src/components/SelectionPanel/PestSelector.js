@@ -2,8 +2,30 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 // import mobx from 'mobx';
 
+// styled-components
+import {Select, Selector} from './styles'
+
 @inject('store') @observer
 class PestSelector extends Component {
+
+    componentDidMount() {
+      const pest = JSON.parse(localStorage.getItem('pest'))
+      if (pest) {
+        this.props.store.app.setPest(pest)
+        this.setState({pest})
+      }
+    }
+
+    state = {
+      pest: '',
+      isDisabled: false
+    }
+
+    handleChange = e => {
+      this.setState({pest: e.target.value})
+      this.setState({isDisabled: true})
+      this.props.localPest(e.target.value)
+    }
 
   render () {
     // console.log(mobx.toJS(this.props.store.app.pest
@@ -13,23 +35,23 @@ class PestSelector extends Component {
       <option key={pest.id} value={pest.informalName}>{pest.informalName}</option>
     )
 
+    let defaultOption = <option>Select Pest</option>
+    if(this.state.isDisabled || this.state.pest !== '') {
+      defaultOption = null
+    }
+
     return (
-      <div>
-        <label className="label">Select a Pest:</label>
-        <div className="control">
-          <span className="select">
-            <select
-              autoFocus
-              value={this.props.store.app.pest.informalName}
-              onChange={this.props.store.app.setPest}
-              defaultValue="Select Pest"
-            >
-              <option disabled="disabled">Select Pest</option>
-              {pestList}
-            </select>
-          </span>
-        </div>
-      </div>
+      <Selector>
+        <label>Select a Pest:</label>
+        <Select
+          autoFocus
+          value={this.state.pest}
+          onChange={this.handleChange}
+        >
+          {defaultOption}
+          {pestList}
+        </Select>
+      </Selector>
     )
   }
 }
