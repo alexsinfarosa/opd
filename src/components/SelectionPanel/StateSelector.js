@@ -11,6 +11,10 @@ import {Select, Selector} from './styles'
 @inject('store') @observer
 class StateSelector extends Component {
 
+  static contextTypes = {
+    router: React.PropTypes.object
+  }
+
   componentDidMount() {
     const state = JSON.parse(localStorage.getItem('state'))
     if (state) {
@@ -27,7 +31,7 @@ class StateSelector extends Component {
   handleChange = e => {
     this.setState({isDisabled: true})
     this.props.store.app.setState(e.target.value)
-    // got to Map View
+    this.context.router.push('/map')
   }
 
   render () {
@@ -56,5 +60,4 @@ class StateSelector extends Component {
     )
   }
 }
-
 export default StateSelector;

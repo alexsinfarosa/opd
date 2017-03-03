@@ -5,29 +5,25 @@ import { inject, observer } from 'mobx-react';
 // styled-components
 import {Select, Selector} from './styles'
 
-// Utilities
-import {matchIconsToStations} from '../../utils'
-
 @inject('store') @observer
 class StationSelector extends Component {
 
   componentDidMount() {
     const station = JSON.parse(localStorage.getItem('station'))
     if (station) {
-      this.setState({station})
+      this.props.store.app.setLocalStation(station)
     }
   }
 
   state = {
-    station: '',
     isDisabled: false
   }
 
   handleChange = e => {
-    const {stations, state} = this.props.store.app
-    this.setState({station: e.target.value})
     this.setState({isDisabled: true})
+    this.props.store.app.setLocalStation(e.target.value)
     this.props.localStation(e.target.value)
+    localStorage.setItem('station', JSON.stringify(e.target.value));
   }
 
   render () {
@@ -38,7 +34,7 @@ class StationSelector extends Component {
     const stationList = getCurrentStateStations.map(station => <option key={`${station.id} ${station.network}`}>{station.name}</option>)
 
     let defaultOption = <option>Select Station</option>
-    if(this.state.isDisabled || this.state.station !== '') {
+    if(this.state.isDisabled || this.props.store.app.localStation !== '') {
       defaultOption = null
     }
 
@@ -49,7 +45,7 @@ class StationSelector extends Component {
         </label>
 
         <Select
-          value={this.state.station}
+          value={this.props.store.app.localStation}
           onChange={this.handleChange}
         >
           {defaultOption}

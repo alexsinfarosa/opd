@@ -8,6 +8,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "date-fns": "^1.28.0",
+    "leaflet": "^1.0.3",
     "lodash": "^4.17.4",
     "mobx": "^3.1.2",
     "mobx-react": "^4.1.1",
@@ -15,6 +16,7 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-flatpickr": "^3.1.1",
+    "react-leaflet": "^1.1.0",
     "react-router-dom": "next",
     "styled-components": "^1.4.4"
   },

@@ -3491,6 +3491,10 @@ lcid@^1.0.0:
   dependencies:
     invert-kv "^1.0.0"
 
+leaflet@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.0.3.tgz#1f401b98b45c8192134c6c8d69686253805007c8"
+
 less-loader@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-2.2.3.tgz#b6d8f8139c8493df09d992a93a00734b08f84528"
@@ -4681,6 +4685,13 @@ react-flatpickr@^3.1.1:
   resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.1.1.tgz#56590abcba40061ea22dff8ad7b73a1da7ee7322"
   dependencies:
     flatpickr "^2.3.5"
+
+react-leaflet@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-1.1.0.tgz#0ec55ff030fae8c90e6e00a48163dcbccbadb4d8"
+  dependencies:
+    lodash "^4.0.0"
+    warning "^3.0.0"
 
 react-router-dom@next:
   version "4.0.0-beta.6"

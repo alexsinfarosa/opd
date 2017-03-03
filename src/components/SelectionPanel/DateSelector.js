@@ -11,8 +11,8 @@ import {Selector} from '../SelectionPanel/styles'
 @observer
 class DateSelector extends Component {
   render() {
-    console.log(this.props.store.app.startDate)
-    console.log(this.props.store.app.endDate)
+    // console.log(this.props.store.app.startDate)
+    // console.log(this.props.store.app.endDate)
     // console.log(`startDate: ${startDate} - endDate: ${endDate}`)
     return (
       <Selector>

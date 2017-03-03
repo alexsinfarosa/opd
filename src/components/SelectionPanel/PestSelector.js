@@ -25,6 +25,7 @@ class PestSelector extends Component {
       this.setState({pest: e.target.value})
       this.setState({isDisabled: true})
       this.props.localPest(e.target.value)
+      localStorage.setItem('pest', JSON.stringify(e.target.value));
     }
 
   render () {

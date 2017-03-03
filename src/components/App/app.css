@@ -1,0 +1,28 @@
+li a {
+  background-color: #ede4d4;
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 5px;
+  margin-top: 4px;
+  margin-left: 4px;
+  font-size: 14px;
+  border: 1px solid #CDC3B7;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  cursor: pointer;
+  color: #544C45;
+}
+
+li a:hover {
+  border: 1px solid #e0cfc2;
+  background-color: #f4f0ec;
+  color: #b85700;
+}
+
+.active {
+  /*border-bottom: none;
+  border: 1px solid #e0cfc2;
+  background-color: #f4f0ec;*/
+  /*color: #b85700;*/
+  color: green;
+}

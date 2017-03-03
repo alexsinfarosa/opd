@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import pestData from '../../public/pestData.json';
 import { states, matchIconsToStations } from '../utils';
-import { format, getYear, isBefore, addDays } from 'date-fns';
+import { format } from 'date-fns';
 import _ from 'lodash';
 
 export default class AppStore {
@@ -9,10 +9,7 @@ export default class AppStore {
   @observable pests = pestData;
   @observable pest = {};
   @action setPest = informalName => {
-    this.pest = this.pests.filter(pest => pest.informalName === informalName)[
-      0
-    ];
-    localStorage.setItem('pest', JSON.stringify(informalName));
+    this.pest = this.pests.filter(pest => pest.informalName === informalName)[0];
   };
 
   // state -----------------------------------------------------------------------
@@ -36,10 +33,11 @@ export default class AppStore {
     );
   }
   @observable station = {};
+  @observable localStation = '';
+  @action setLocalStation = d => this.localStation = d
   @action setStation = stationName => {
     this.station = this.stations.filter(
       station => station.name === stationName)[0];
-      localStorage.setItem('station', JSON.stringify(stationName));
   };
 
   // DATES -----------------------------------------------------------------------

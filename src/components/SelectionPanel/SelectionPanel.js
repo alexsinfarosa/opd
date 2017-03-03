@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 // import axios from 'axios';
-import { toJS } from 'mobx'
+// import { toJS } from 'mobx'
 import { format } from 'date-fns';
 
 // Components
@@ -23,10 +23,8 @@ class SelectionPanel extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    const {pest, station, startDate, endDate} = this.state
+    const {pest, station} = this.state
     this.props.store.app.setPest(pest)
-    this.props.store.app.setStation(station)
-    this.props.store.app.setStation(station)
     this.props.store.app.setStation(station)
 
     // console.log(toJS(this.props.store.app.pest.informalName))
@@ -38,7 +36,7 @@ class SelectionPanel extends Component {
     pest: '',
     station: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
   }
 
   handlePest = (d) => {

@@ -3,17 +3,23 @@ import { inject, observer } from 'mobx-react';
 import { when } from 'mobx';
 import {
   BrowserRouter as Router,
-  // Route,
-  // Link
+  Route,
+  Link,
 } from 'react-router-dom';
 import axios from 'axios';
 
+// styled
+import './app.css'
+
 // styled-components
-import {Page, App, Wrapper, LeftPanel, RightPanel, Header} from './styles';
+import {Page, App, AppWrapper, LeftPanel, RightPanel, Header, NavWrapper, Ul} from './styles';
 
 // Components
 import SelectionPanel from '../SelectionPanel/SelectionPanel'
-
+import Home from '../../views/Home'
+import TheMap from '../../views/TheMap'
+import Results from '../../views/Results'
+import MoreInfo from '../../views/MoreInfo'
 
 @inject('store')
 @observer
@@ -27,7 +33,7 @@ export default class AppComponent extends Component {
       // ... then
       () => this.fetchAllStations()
     );
-  }
+  };
 
   fetchAllStations = () => {
     axios
@@ -47,17 +53,31 @@ export default class AppComponent extends Component {
         <Page>
           <App>
             <Header>NEWA Apple Insect Models</Header>
-            <Wrapper>
+            <AppWrapper>
 
               <LeftPanel>
                 <SelectionPanel />
               </LeftPanel>
 
               <RightPanel>
-                RIGHT
+                <NavWrapper>
+                  <Ul>
+                    <li><Link to="/map">Map</Link></li>
+                    <li><Link to="/results">Results</Link></li>
+                    <li><Link to="/moreinfo">More Info</Link></li>
+                  </Ul>
+                </NavWrapper>
+
+                <br/>
+
+                <Route exact path="/" component={Home}/>
+                <Route path="/map" component={TheMap}/>
+                <Route path="/results" component={Results}/>
+                <Route path="/moreinfo" component={MoreInfo}/>
+
               </RightPanel>
 
-            </Wrapper>
+            </AppWrapper>
           </App>
         </Page>
       </Router>

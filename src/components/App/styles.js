@@ -20,17 +20,35 @@ export const App = styled.div`
   ${''/* background-color: pink; */}
 `;
 
-export const Wrapper = styled.div`
+export const AppWrapper = styled.div`
   display: flex;
   width: 100%;
-  ${''/* background-color: yellow; */}
 `;
 
-export const Wrapper2 = styled.div`
-    max-width: 960px;
-    margin: auto;
-    width: 100%;
-    padding: 0 30px;
+export const ViewWrapper = styled(AppWrapper)`
+  justify-content: center;
+  align-items: flex-start;
+`;
+
+export const MoreInfoWrapper = styled(ViewWrapper)`
+  flex-direction: column;
+`;
+
+export const NavWrapper = styled.div`
+  max-width: 100%;
+  margin: 0 auto;
+`;
+
+export const Ul = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  border: 1px solid #d49768;
+  background: #cb842e;
+  border-radius: 5px;
+  font-family: Helvetica,Arial,sans-serif;
+  color: #3f3731;
 `;
 
 export const Header = styled.div`
@@ -42,21 +60,20 @@ export const Header = styled.div`
 export const LeftPanel = styled.div`
   border: 1px solid #808080;
   height: 280px;
-  ${''/* display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch; */}
   flex-basis: 220px;
   margin-right: 10px;
   padding: 10px;
   font-size: 15px;
   font-weight: 500;
+  border-radius: 5px;
 `
 
 export const RightPanel = styled.div`
-  border: 1px solid #eee;
+  border: 1px solid #E0CFC2;
+  background-color: #F4F0EC;
   height: 608px;
   flex: 1;
   padding: 10px;
+  border-radius: 5px;
 
 `
