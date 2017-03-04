@@ -10,13 +10,14 @@ export default class AppStore {
   @observable pest = {};
   @action setPest = informalName => {
     this.pest = this.pests.filter(pest => pest.informalName === informalName)[0];
+    localStorage.setItem('pest', JSON.stringify(this.pest))
   };
 
   // state -----------------------------------------------------------------------
   @observable state = {};
   @action setState = stateName => {
     this.state = states.filter(state => state.name === stateName)[0];
-    localStorage.setItem('state', JSON.stringify(stateName));
+    localStorage.setItem('state', JSON.stringify(this.state));
   };
 
   // stations --------------------------------------------------------------------
@@ -33,19 +34,19 @@ export default class AppStore {
     );
   }
   @observable station = {};
-  @observable localStation = '';
-  @action setLocalStation = d => this.localStation = d
   @action setStation = stationName => {
-    this.station = this.stations.filter(
-      station => station.name === stationName)[0];
+    this.station = this.stations.filter(station => station.name === stationName)[0];
+    localStorage.setItem('station', JSON.stringify(this.station))
   };
 
   // DATES -----------------------------------------------------------------------
-  @observable endDate = new Date();
-  @action setEndDate = d => {
-    this.endDate = format(d, 'YYYY/MM/DD')
+  @observable endDate = format(new Date(),'YYYY/MM/DD');
+  @action setEndDate = d => this.endDate = format(d, 'YYYY/MM/DD')
+  @computed get getStartDate() {
+    return (
+      `${format(this.endDate, 'YYYY')}/01/01`
+    )
   }
-  @observable startDate = `${format(this.endDate, 'YYYY')}/01/01`;
   // @computed get getEndDate () {
   //   return (
   //     // No Forecast
@@ -106,4 +107,15 @@ export default class AppStore {
       this.pest && this.state && this.station && this.endDate
     ).length === 0;
   }
+  // Results----------------------------------------------------------------------
+  @observable rPest = {}
+  @action setRpest = d => this.rPest = d
+  @observable rState = {}
+  @action setRstate = d => this.rState = d
+  @observable rStation = {}
+  @action setRstation = d => this.rStation = d
+  @observable rEndDate = ''
+  @action setREndDate = d => this.rEndDate = d
+  @observable rStartDate = ''
+  @action setRStartDate = d => this.rStartDate = d
 }

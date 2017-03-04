@@ -8,48 +8,34 @@ import {Select, Selector} from './styles'
 @inject('store') @observer
 class PestSelector extends Component {
 
-    componentDidMount() {
-      const pest = JSON.parse(localStorage.getItem('pest'))
-      if (pest) {
-        this.props.store.app.setPest(pest)
-        this.setState({pest})
-      }
-    }
-
     state = {
-      pest: '',
       isDisabled: false
     }
 
     handleChange = e => {
-      this.setState({pest: e.target.value})
       this.setState({isDisabled: true})
-      this.props.localPest(e.target.value)
-      localStorage.setItem('pest', JSON.stringify(e.target.value));
+      this.props.store.app.setPest(e.target.value)
     }
 
   render () {
-    // console.log(mobx.toJS(this.props.store.app.pest
-
+    // console.log(toJS(this.props.store.app.pest))
     const {pests} = this.props.store.app;
+    const {isDisabled} = this.state
+
     const pestList = pests.map(pest =>
       <option key={pest.id} value={pest.informalName}>{pest.informalName}</option>
     )
 
-    let defaultOption = <option>Select Pest</option>
-    if(this.state.isDisabled || this.state.pest !== '') {
-      defaultOption = null
-    }
-
     return (
       <Selector>
-        <label>Select a Pest:</label>
+        <label>Pest:</label>
         <Select
+          name="pest"
           autoFocus
-          value={this.state.pest}
+          value={this.props.store.app.pest.informalName}
           onChange={this.handleChange}
         >
-          {defaultOption}
+          {isDisabled ? null : <option>Select Pest</option>}
           {pestList}
         </Select>
       </Selector>

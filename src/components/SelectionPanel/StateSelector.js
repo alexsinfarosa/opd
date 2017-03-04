@@ -15,16 +15,7 @@ class StateSelector extends Component {
     router: React.PropTypes.object
   }
 
-  componentDidMount() {
-    const state = JSON.parse(localStorage.getItem('state'))
-    if (state) {
-      this.props.store.app.setState(state)
-      this.setState({state})
-    }
-  }
-
   state = {
-    state: '',
     isDisabled: false
   }
 
@@ -36,24 +27,21 @@ class StateSelector extends Component {
 
   render () {
     // console.log(mobx.toJS(this.props.store.app.state))
+    const {isDisabled} = this.state
 
     const stateList = states.map(state =>
       <option key={state.postalCode}>{state.name}</option>
     )
 
-    let defaultOption = <option>Select State</option>
-    if(this.state.isDisabled || this.state.state !== '') {
-      defaultOption = null
-    }
-
     return (
       <Selector>
-        <label>Select a State:</label>
+        <label>State:</label>
         <Select
+          name="state"
           value={this.props.store.app.state.name}
           onChange={this.handleChange}
         >
-          {defaultOption}
+          {isDisabled ? null : <option>Select State</option>}
           {stateList}
         </Select>
       </Selector>

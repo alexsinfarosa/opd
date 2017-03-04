@@ -24,7 +24,7 @@ export default class TheMap extends Component {
     const {stations, state} = this.props.store.app
     const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
     if (selectedStation.state === state.postalCode) {
-      this.props.store.app.setLocalStation(selectedStation.name)
+      this.props.store.app.setStation(selectedStation.name)
     } else {
       const selectedStation = stations.filter(station => (station.lat === lat && station.lon === lng))[0]
       const state = states.filter(state => state.postalCode === selectedStation.state)[0]

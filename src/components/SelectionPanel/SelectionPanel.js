@@ -17,44 +17,37 @@ import {Selector, CalculateBtn} from '../SelectionPanel/styles'
 @observer
 class SelectionPanel extends Component {
 
+  static contextTypes = {
+    router: React.PropTypes.object
+  }
+
   state = {
     currentYear: format(new Date(), 'YYYY')
   };
 
   handleSubmit = (e) => {
+    const {pest,state,station,getStartDate,endDate} = this.props.store.app
     e.preventDefault()
-    const {pest, station} = this.state
-    this.props.store.app.setPest(pest)
-    this.props.store.app.setStation(station)
-
+    this.props.store.app.setRpest(pest)
+    this.props.store.app.setRstate(state)
+    this.props.store.app.setRstation(station)
+    this.props.store.app.setREndDate(endDate)
+    this.props.store.app.setRStartDate(getStartDate)
     // console.log(toJS(this.props.store.app.pest.informalName))
     // console.log(toJS(this.props.store.app.state.name))
     // console.log(toJS(this.props.store.app.station.name))
-  }
+    this.context.router.push('/results')
 
-  state = {
-    pest: '',
-    station: '',
-    startDate: '',
-    endDate: '',
-  }
-
-  handlePest = (d) => {
-    this.setState({pest: d})
-  }
-
-  handleStation = (d) => {
-    this.setState({station: d})
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <PestSelector localPest={this.handlePest}/>
+        <PestSelector />
         <br/>
         <StateSelector />
         <br/>
-        <StationSelector localStation={this.handleStation}/>
+        <StationSelector />
         <br/>
         <DateSelector />
         <br/>
