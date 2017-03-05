@@ -1,0 +1,51 @@
+table {
+  /*border: 1px solid #2C2C2C;*/
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+  /*table-layout: fixed;*/
+  text-align: center;
+}
+
+tr {
+  height: 30px;
+  border: 1px solid #808080;
+}
+
+th {
+  border: 1px solid #808080;
+  text-align: center;
+}
+
+td {
+  border: 1px solid #808080;
+  width: 60px;
+}
+
+h4 {
+  font-size: 18px;
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+h5 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.months {
+  font-weight: 100;
+  font-size: 13px;
+}
+
+.before {
+  background: #CCFFFF;
+}
+
+.after {
+  background: #EEE8AA;
+}
+
+.has-text-centered {
+  text-align: center;
+}

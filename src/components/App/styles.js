@@ -30,8 +30,8 @@ export const ViewWrapper = styled(AppWrapper)`
   align-items: flex-start;
 `;
 
-export const MoreInfoWrapper = styled(ViewWrapper)`
-  flex-direction: column;
+export const ResultsWrapper = styled.div`
+  font-family: 'Times New Roman'
 `;
 
 export const NavWrapper = styled.div`
@@ -76,4 +76,13 @@ export const RightPanel = styled.div`
   padding: 10px;
   border-radius: 5px;
 
+`
+
+export const Images = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+export const Img = styled.img`
+  width: 70px;
+  height: auto;
 `

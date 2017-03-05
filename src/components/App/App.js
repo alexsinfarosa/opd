@@ -18,7 +18,7 @@ import {Page, App, AppWrapper, LeftPanel, RightPanel, Header, NavWrapper, Ul} fr
 import SelectionPanel from '../SelectionPanel/SelectionPanel'
 import Home from '../../views/Home'
 import TheMap from '../../views/TheMap'
-import Results from '../../views/Results'
+import Results from '../../views/Results/Results'
 import MoreInfo from '../../views/MoreInfo'
 
 @inject('store')

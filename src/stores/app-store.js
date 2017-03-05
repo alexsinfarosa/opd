@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import pestData from '../../public/pestData.json';
 import { states, matchIconsToStations } from '../utils';
-import { format } from 'date-fns';
+import { format, isBefore, addDays } from 'date-fns';
 import _ from 'lodash';
 
 export default class AppStore {
@@ -40,23 +40,9 @@ export default class AppStore {
   };
 
   // DATES -----------------------------------------------------------------------
-  @observable endDate = format(new Date(),'YYYY/MM/DD');
-  @action setEndDate = d => this.endDate = format(d, 'YYYY/MM/DD')
-  @computed get getStartDate() {
-    return (
-      `${format(this.endDate, 'YYYY')}/01/01`
-    )
-  }
-  // @computed get getEndDate () {
-  //   return (
-  //     // No Forecast
-  //     // if (isBefore(this.endDate, new Date())) {
-  //     //   const endDatePlusFiveDays = addDays(this.endDate, 5);
-  //     //   this.endDate = format(endDatePlusFiveDays, 'MM/DD/YYYY');
-  //     // }
-  //     format(this.startDate, 'MM/DD/YYYY')
-  //   )
-  // }
+  @observable endDate = new Date();
+  @action setEndDate = e => this.endDate = format(e, 'YYYY-MM-DD');
+  @computed get getStartDate() {return `${format(this.endDate, 'YYYY')}-01-01`}
 
   // stage -----------------------------------------------------------------------
   @observable stage = {};
@@ -65,10 +51,10 @@ export default class AppStore {
 
   // ACISData --------------------------------------------------------------------
   @observable ACISData = [];
-  @action updateACISData = d => this.ACISData = d;
+  @action setACISData = d => this.ACISData = d;
   @computed get getDate() {
-    const days = this.ACISData.map(e => e[0])
-    return days.map(e => format(e, 'MMM D'))
+    return this.ACISData.map(e => e[0])
+    // return days.map(e => format(e, 'MMM D'))
   }
 
   // degreeDay -------------------------------------------------------------------
@@ -115,7 +101,8 @@ export default class AppStore {
   @observable rStation = {}
   @action setRstation = d => this.rStation = d
   @observable rEndDate = ''
-  @action setREndDate = d => this.rEndDate = d
-  @observable rStartDate = ''
-  @action setRStartDate = d => this.rStartDate = d
+  @action setREndDate = d => {
+    const endDatePlusFiveDays = addDays(this.endDate, 5);
+    this.rEndDate = format(endDatePlusFiveDays, 'YYYY-MM-DD');
+  }
 }
