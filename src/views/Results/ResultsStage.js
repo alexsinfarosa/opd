@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {inject, observer} from 'mobx-react'
-import {toJS} from 'mobx'
+// import {toJS} from 'mobx'
 
 @inject('store') @observer
 class ResultsStage extends Component {
@@ -22,7 +22,6 @@ class ResultsStage extends Component {
   render() {
     const { rPest, getStage } = this.props.store.app
     const {isDisabled, localStage, edited} = this.state
-    console.log(toJS(this.props.store.app.getStage))
 
     const stageList = rPest.preBiofix.map(stage =>
         <option key={stage.id}>{stage.stage}</option>

@@ -51,10 +51,10 @@ export default class AppStore {
   @observable stage = {};
   // @computed get getStage() {return this.stage}
   @action setStage = () => {
-    this.stage = this.pest.preBiofix.filter(stage => (this.currentCDD > stage.ddlo && this.currentCDD < stage.ddhi))[0]
+    this.stage = this.rPest.preBiofix.filter(stage => (this.currentCDD > stage.ddlo && this.currentCDD < stage.ddhi))[0]
   }
   @computed get getStage() {
-  return this.pest.preBiofix.filter(stage => (this.currentCDD > stage.ddlo && this.currentCDD < stage.ddhi))[0]
+  return this.rPest.preBiofix.filter(stage => (this.currentCDD > stage.ddlo && this.currentCDD < stage.ddhi))[0]
 }
 
   // ACISData --------------------------------------------------------------------

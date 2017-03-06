@@ -215,10 +215,9 @@ class SelectionPanel extends Component {
             if (sisterData) {
               axios
                 .get(
-                  `http://newatest.nrcc.cornell.edu/newaUtil/getFcstData/${station.id}/${station.network}/temp/${sDate}/${eDate}`
+                  `http://newa.nrcc.cornell.edu/newaUtil/getFcstData/${station.id}/${station.network}/temp/${sDate}/${eDate}`
                 )
                 .then(res => {
-                  console.log(res.data.data)
                   if (!res.data.hasOwnProperty('error')) {
                     const forecastFlat = flattenArray(res.data.data);
                     console.log(

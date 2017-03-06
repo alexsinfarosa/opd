@@ -8,12 +8,14 @@ import { format, isBefore, subDays } from 'date-fns';
 // styles
 import './results.css';
 
+
 @inject('store')
 @observer
 export default class ResultsTable extends Component {
 
   state = {
-    isGraphDisplayed: false
+    isGraphDisplayed: false,
+    currentYear: format(new Date(), 'YYYY')
   }
 
   handleGraphClick = () => {
@@ -27,7 +29,9 @@ export default class ResultsTable extends Component {
       rPest,
       getCumulativeDegreeDay,
       getDate,
-      getDegreeDay
+      getDegreeDay,
+      endDate,
+      station
     } = this.props.store.app;
 
     const displayMonths = getDate.map(date => {
@@ -36,7 +40,24 @@ export default class ResultsTable extends Component {
       } else {
         return <th className="months after"key={date}>{format(date,'MMM D')}</th>
       }
-    })
+    });
+
+    let HeaderTable = null
+    if(this.state.currentYear === format(subDays(endDate, 5), 'YYYY')) {
+        HeaderTable =
+        <th className="after" colSpan="5"> 5 Days forecasts
+          <a
+            target="_blank"
+            href={`http://forecast.weather.gov/MapClick.php?textField1=${station.lat}&textField2=${station.lon}`}
+            className="forecast-details"
+            >
+            Forecast Details
+          </a>
+        </th>
+    } else {
+      HeaderTable = <th className="after" colSpan="5"> Ensuing 5 Days</th>
+    }
+
 
     const displayDegreeDay = getDegreeDay.map((dd,i) => <td key={i}>{dd}</td>)
     const displayCumulativeDegreeDay = getCumulativeDegreeDay.map((cdd,i) => <td key={i}>{cdd}</td>)
@@ -50,7 +71,7 @@ export default class ResultsTable extends Component {
                 <th className="before">Past</th>
                 <th className="before">Past</th>
                 <th className="before">Current</th>
-                <th className="after" colSpan="5"> Ensuing 5 Days </th>
+                {HeaderTable}
               </tr>
               <tr>
                 <th>Date</th>

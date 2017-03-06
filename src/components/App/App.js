@@ -52,7 +52,7 @@ export default class AppComponent extends Component {
       <Router>
         <Page>
           <App>
-            <Header>NEWA Apple Insect Models</Header>
+            <Header>NEWA Commercial Tree and Shrub Insect Models</Header>
             <AppWrapper>
 
               <LeftPanel>
