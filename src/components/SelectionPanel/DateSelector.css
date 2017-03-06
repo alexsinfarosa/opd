@@ -1,3 +1,10 @@
+.noselect {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: .5;
+
+}
+
 input.input-calender {
   -moz-appearance: none;
   -webkit-appearance: none;

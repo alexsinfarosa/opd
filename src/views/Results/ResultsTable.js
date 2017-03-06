@@ -30,12 +30,12 @@ export default class ResultsTable extends Component {
       getCumulativeDegreeDay,
       getDate,
       getDegreeDay,
-      endDate,
-      station
+      station,
+      rendDate
     } = this.props.store.app;
 
     const displayMonths = getDate.map(date => {
-      if(isBefore(subDays(date,1), this.props.store.app.endDate, 'MMM d')) {
+      if(isBefore(subDays(date,1), rendDate)) {
         return <th className="months before"key={date}>{format(date,'MMM D')}</th>
       } else {
         return <th className="months after"key={date}>{format(date,'MMM D')}</th>
@@ -43,7 +43,7 @@ export default class ResultsTable extends Component {
     });
 
     let HeaderTable = null
-    if(this.state.currentYear === format(subDays(endDate, 5), 'YYYY')) {
+    if(this.state.currentYear === format(this.props.store.app.endDate, 'YYYY')) {
         HeaderTable =
         <th className="after" colSpan="5"> 5 Days forecasts
           <a

@@ -99,9 +99,19 @@ h5 {
 
 .forecast-details:hover {
   background-color: #FFFF66;
-
 }
 
 .forecast-details:focus {
   outline: none;
+}
+
+a.more-info {
+  display: inline-block;
+  color: #544C45;
+  text-decoration: none;
+  margin-top: 5px;
+}
+a.more-info:hover {
+  color: #544C45;
+  text-decoration: underline;
 }

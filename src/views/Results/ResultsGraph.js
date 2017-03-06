@@ -36,7 +36,7 @@ export default class ResultsTable extends Component {
             dataKey="Accumulated Degree-Days"
             dot={false}
             stroke="black"
-            activeDot={{ r: 9 }}
+            activeDot={{ r: 7 }}
           />
         </LineChart>
       </div>

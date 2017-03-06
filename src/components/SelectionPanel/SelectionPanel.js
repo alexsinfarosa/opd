@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import axios from 'axios';
-import { format, subDays } from 'date-fns';
+import { format, subDays, addDays } from 'date-fns';
 // import { toJS } from 'mobx'
 
 // Components
@@ -12,6 +12,9 @@ import DateSelector from './DateSelector';
 
 // styled-components
 import {Selector, CalculateBtn} from '../SelectionPanel/styles'
+
+// styles
+import './DateSelector.css'
 
 // utility functions
 import {
@@ -37,31 +40,28 @@ class SelectionPanel extends Component {
 
   state = {
     currentYear: format(new Date(), 'YYYY'),
-    isDisabled: false
+    isDisabled: true
   };
 
   handleSubmit = (e) => {
-    const {pest,state,station,rEndDate} = this.props.store.app
+    const {pest,state,station,endDate} = this.props.store.app
     e.preventDefault()
 
     // set the state for the results page
     this.props.store.app.setRpest(pest)
     this.props.store.app.setRstate(state)
     this.props.store.app.setRstation(station)
-    this.props.store.app.setREndDate(rEndDate)
-    this.props.store.app.setReady(true)
+    this.props.store.app.setREndDate(endDate)
 
     // get data from ACIS
     this.getACISdata()
-
-    // go to the Results page
+    this.props.store.app.setReady(true)
     this.context.router.push('/results')
-
   }
 
   getACISdata = () => {
-    const { station, rEndDate, getStartDate } = this.props.store.app;
-
+    const { station, rendDate, getStartDate } = this.props.store.app;
+    const rEndDate = addDays(rendDate, 5)
     // Creating the object for the POST request
     const params = {
       sid: `${michiganIdAdjustment(station)} ${station.network}`,
@@ -97,7 +97,8 @@ class SelectionPanel extends Component {
     console.log(
       '------------------------------------------------------------------------'
     );
-    const { pest, station, getStartDate, rEndDate } = this.props.store.app;
+    const { pest, station, getStartDate, rendDate } = this.props.store.app;
+    const rEndDate = addDays(rendDate, 5)
     const dataFlat = flattenArray(data);
     console.log(`current station: ${dataFlat.filter(e => e === 'M').length}`);
     // console.log(dataFlat.toString());
@@ -150,10 +151,10 @@ class SelectionPanel extends Component {
               );
 
               console.log(
-                `after replacemet with sister station: ${currentFlat.filter(e =>
-                    e === 'M').length}`
+                `after replacement with sister station: ${currentFlat.filter(e =>
+                    e === 'M').length} missing values`
               );
-              console.log('current data after replacing data from sister: ' + currentFlat.toString());
+              console.log('current data after replacing data with sister: ' + currentFlat.toString());
 
               if (currentFlat.filter(e => e === 'M').length === 0) {
                 this.props.store.app.updateDegreeDay(
@@ -210,7 +211,7 @@ class SelectionPanel extends Component {
             // console.log(currentFlat.toString())
             const sDate = format(getStartDate, 'YYYY-MM-DD');
             const eDate = format(rEndDate, 'YYYY-MM-DD');
-            console.log('sisterData: ' + sisterData.toString())
+            // console.log('sisterData: ' + sisterData.toString())
 
             if (sisterData) {
               axios
@@ -221,7 +222,7 @@ class SelectionPanel extends Component {
                   if (!res.data.hasOwnProperty('error')) {
                     const forecastFlat = flattenArray(res.data.data);
                     console.log(
-                      `forecast flat: ${forecastFlat.filter(e =>
+                      `forecast flat missing values: ${forecastFlat.filter(e =>
                           e === 'M').length}`
                     );
                     console.log(`forecast data: ${forecastFlat.toString()}`)
@@ -233,7 +234,7 @@ class SelectionPanel extends Component {
 
                     console.log(
                       `after replacement with forecast Data there are: ${currentFlat.filter(e =>
-                          e === 'M').length}`
+                          e === 'M').length} missing values`
                     );
                     console.log(currentFlat.toString());
 
@@ -267,7 +268,7 @@ class SelectionPanel extends Component {
   };
 
   render() {
-    // const { getAllRequiredFields } = this.props.store.app;
+    const {getAllRequiredFields} = this.props.store.app
     return (
       <form onSubmit={this.handleSubmit}>
         <PestSelector />
@@ -280,7 +281,7 @@ class SelectionPanel extends Component {
         <br/>
         <Selector>
           <CalculateBtn
-            // className={`${getAllRequiredFields ? 'disabled' : null}`}
+            className={getAllRequiredFields ? 'noselect' : null}
             type="submit"
           >
             Calculate

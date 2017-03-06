@@ -4,7 +4,7 @@ import { when } from 'mobx';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
+  NavLink
 } from 'react-router-dom';
 import axios from 'axios';
 
@@ -62,9 +62,9 @@ export default class AppComponent extends Component {
               <RightPanel>
                 <NavWrapper>
                   <Ul>
-                    <li><Link to="/map">Map</Link></li>
-                    <li><Link to="/results">Results</Link></li>
-                    <li><Link to="/moreinfo">More Info</Link></li>
+                    <li><NavLink  to="/map">Map</NavLink></li>
+                    <li><NavLink  to="/results">Results</NavLink></li>
+                    <li><NavLink  to="/moreinfo">More Info</NavLink></li>
                   </Ul>
                 </NavWrapper>
 

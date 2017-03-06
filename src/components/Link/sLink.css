@@ -11,6 +11,7 @@
   border-top-right-radius: 5px;
   cursor: pointer;
   color: #544C45;
+  color: red;
 }
 
 .sLink:hover {

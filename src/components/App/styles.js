@@ -17,13 +17,15 @@ export const App = styled.div`
   justify-content: space-around;
   align-items: flex-start;
   padding: 20px;
+  overflow: auto;
   ${''/* background-color: pink; */}
 `;
 
 export const AppWrapper = styled.div`
   display: flex;
-  overflow: auto;
   width: 100%;
+  ${''/* background-color: orange; */}
+  overflow: auto;
 `;
 
 export const ViewWrapper = styled(AppWrapper)`
@@ -50,6 +52,7 @@ export const Ul = styled.ul`
   border-radius: 5px;
   font-family: Helvetica,Arial,sans-serif;
   color: #3f3731;
+  position: relative;
 `;
 
 export const Header = styled.div`

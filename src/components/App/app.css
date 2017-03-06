@@ -1,4 +1,4 @@
-li a {
+ul li a {
   background-color: #ede4d4;
   text-decoration: none;
   display: inline-block;
@@ -13,16 +13,20 @@ li a {
   color: #544C45;
 }
 
-li a:hover {
+ul li a:visited {
+  color: #544C45;
+}
+
+ul li a:focus {
+  color: #b85700;
+}
+
+ul li a:hover {
   border: 1px solid #e0cfc2;
   background-color: #f4f0ec;
   color: #b85700;
 }
 
-.active {
-  /*border-bottom: none;
-  border: 1px solid #e0cfc2;
-  background-color: #f4f0ec;*/
-  /*color: #b85700;*/
-  color: green;
+ul li a:active {
+  color: #b85700;
 }

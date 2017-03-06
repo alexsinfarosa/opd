@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import pestData from '../../public/pestData.json';
 import { states, matchIconsToStations } from '../utils';
-import { format, addDays } from 'date-fns';
+import { format } from 'date-fns';
 import _ from 'lodash';
 
 export default class AppStore {
@@ -111,9 +111,10 @@ export default class AppStore {
   @action setRstate = d => this.rState = d
   @observable rStation = {}
   @action setRstation = d => this.rStation = d
-  @observable rEndDate = ''
+  @observable rendDate = ''
   @action setREndDate = d => {
-    const endDatePlusFiveDays = addDays(this.endDate, 5);
-    this.rEndDate = format(endDatePlusFiveDays, 'YYYY-MM-DD');
+    // const endDatePlusFiveDays = addDays(this.endDate, 5);
+    // this.rEndDate = format(endDatePlusFiveDays, 'YYYY-MM-DD');
+    this.rendDate = format(d, 'YYYY-MM-DD')
   }
 }
