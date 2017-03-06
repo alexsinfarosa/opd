@@ -55,7 +55,6 @@ class SelectionPanel extends Component {
 
     // get data from ACIS
     this.getACISdata()
-    this.props.store.app.setReady(true)
     this.context.router.push('/results')
   }
 
@@ -82,6 +81,7 @@ class SelectionPanel extends Component {
         if (!res.data.hasOwnProperty('error')) {
           this.props.store.app.setACISData(res.data.data);
           this.replaceMissingValues(res.data.data);
+          this.props.store.app.setReady(true)
         } else {
           console.log(res.data.error);
         }

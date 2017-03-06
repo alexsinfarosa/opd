@@ -115,3 +115,10 @@ a.more-info:hover {
   color: #544C45;
   text-decoration: underline;
 }
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80%;
+}

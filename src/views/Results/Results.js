@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Spinner from 'react-spinkit';
 
 // Images
 import newaPic from './images/newa_logo.jpg';
@@ -23,8 +24,8 @@ export default class Results extends Component {
     const {ready} = this.props.store.app
     if(!ready) {
       return (
-        <div className="has-text-centered">
-          <h5>Loading...</h5>
+        <div className="centered">
+          Loading <Spinner spinnerName='circle' style={{marginLeft: '10px'}}/>
         </div>
       )
     } else {
