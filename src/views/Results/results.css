@@ -49,3 +49,38 @@ h5 {
 .has-text-centered {
   text-align: center;
 }
+
+.graph {
+  /*background-color: white;*/
+  border-radius: 3px;
+}
+
+
+.graph-link {
+  display: block;
+  margin-top: 5px;
+  padding: 2px 3px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.graph-link:hover {
+  outline: none;
+  text-decoration: underline;
+}
+
+.columns {
+  text-align: center;
+  margin: 10px auto;
+}
+
+.stage {
+  margin-top: 5px;
+  font-size: 13px;
+  border: 1px solid #CECECE;
+  width: auto;
+}
+
+.stage:focus {
+  outline: none;
+}

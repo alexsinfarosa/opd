@@ -41,7 +41,7 @@ class SelectionPanel extends Component {
   };
 
   handleSubmit = (e) => {
-    const {pest,state,station,getStartDate,rEndDate} = this.props.store.app
+    const {pest,state,station,rEndDate} = this.props.store.app
     e.preventDefault()
 
     // set the state for the results page
@@ -49,6 +49,7 @@ class SelectionPanel extends Component {
     this.props.store.app.setRstate(state)
     this.props.store.app.setRstation(station)
     this.props.store.app.setREndDate(rEndDate)
+    this.props.store.app.setReady(true)
 
     // get data from ACIS
     this.getACISdata()

@@ -1,10 +1,13 @@
 import { observable, action, computed } from 'mobx';
 import pestData from '../../public/pestData.json';
 import { states, matchIconsToStations } from '../utils';
-import { format, isBefore, addDays } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import _ from 'lodash';
 
 export default class AppStore {
+
+  @observable ready = false;
+  @action setReady = d => this.ready = d;
   // pest ------------------------------------------------------------------------
   @observable pests = pestData;
   @observable pest = {};
@@ -46,8 +49,13 @@ export default class AppStore {
 
   // stage -----------------------------------------------------------------------
   @observable stage = {};
-  @computed get getStage() {return this.stage}
-  @action updateStage = d => this.stage = d;
+  // @computed get getStage() {return this.stage}
+  @action setStage = () => {
+    this.stage = this.pest.preBiofix.filter(stage => (this.currentCDD > stage.ddlo && this.currentCDD < stage.ddhi))[0]
+  }
+  @computed get getStage() {
+  return this.pest.preBiofix.filter(stage => (this.currentCDD > stage.ddlo && this.currentCDD < stage.ddhi))[0]
+}
 
   // ACISData --------------------------------------------------------------------
   @observable ACISData = [];
@@ -64,9 +72,12 @@ export default class AppStore {
   }
   @action updateDegreeDay = d => this.degreeDay = d;
   @computed get getCumulativeDegreeDay() {
-    const results = [];
-    this.degreeDay.reduce((prev, curr, i) => results[i] = prev + curr, 0);
-    return results;
+    const arr = [];
+    this.degreeDay.reduce((prev, curr, i) => arr[i] = prev + curr, 0);
+    return arr;
+  }
+  @computed get currentCDD() {
+    return this.getCumulativeDegreeDay[this.getCumulativeDegreeDay.length - 6]
   }
   @computed get cumulativeDegreeDayDataGraph() {
     const arr = []

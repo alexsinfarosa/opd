@@ -8,7 +8,7 @@ import acisPic from './images/PoweredbyACIS_NRCC.jpg';
 // Components
 import ResultsHeader from './ResultsHeader';
 import ResultsTable from './ResultsTable';
-// import ResultsStage from './ResultsStage';
+import ResultsStage from './ResultsStage';
 
 // style
 // import './results.css';
@@ -20,6 +20,14 @@ import {ResultsWrapper, Images, Img} from '../../components/App/styles'
 @observer
 export default class Results extends Component {
   render() {
+    const {ready} = this.props.store.app
+    if(!ready) {
+      return (
+        <div className="has-text-centered">
+          <h5>Loading...</h5>
+        </div>
+      )
+    } else {
     return (
       <ResultsWrapper>
 
@@ -32,7 +40,7 @@ export default class Results extends Component {
         <ResultsTable />
 
         {/* DETAILS STAGE */}
-        {/* <ResultsStage /> */}
+        <ResultsStage />
 
         <br />
 
@@ -64,5 +72,6 @@ export default class Results extends Component {
 
       </ResultsWrapper>
     );
+    }
   }
 }

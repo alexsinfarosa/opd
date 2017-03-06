@@ -22,6 +22,7 @@ export const App = styled.div`
 
 export const AppWrapper = styled.div`
   display: flex;
+  overflow: auto;
   width: 100%;
 `;
 
@@ -75,7 +76,7 @@ export const RightPanel = styled.div`
   flex: 1;
   padding: 10px;
   border-radius: 5px;
-
+  overflow: auto;
 `
 
 export const Images = styled.div`

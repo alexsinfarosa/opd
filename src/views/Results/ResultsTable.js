@@ -29,7 +29,6 @@ export default class ResultsTable extends Component {
       getDate,
       getDegreeDay
     } = this.props.store.app;
-    console.log(getDate.slice())
 
     const displayMonths = getDate.map(date => {
       if(isBefore(subDays(date,1), this.props.store.app.endDate, 'MMM d')) {
@@ -68,9 +67,9 @@ export default class ResultsTable extends Component {
                 {_.takeRight(displayCumulativeDegreeDay, 8)}
               </tr>
               <tr>
-                <td colSpan="9" className="has-text-centered">
+                <td colSpan="9" className="has-text-centered graph">
                   <a
-
+                    className="graph-link"
                     onClick={this.handleGraphClick}>
                     {this.state.isGraphDisplayed ? 'Hide' : 'Show'} Accumulated Degree-Days Graph
                   </a>
