@@ -67,6 +67,7 @@ class SelectionPanel extends Component {
       edate: format(addDays(this.props.store.app.rEndDate, 5), 'YYYY-MM-DD'),
       elems: networkTemperatureAdjustment(station.network)
     };
+    console.log(params)
     return axios.post('http://data.test.rcc-acis.org/StnData', params)
     .then(res => {
       if(!res.data.hasOwnProperty('error')) {
@@ -76,6 +77,7 @@ class SelectionPanel extends Component {
           this.props.store.app.updateDegreeDay(
             calculateDegreeDay(pest, unflattenArray(acis))
           );
+          this.props.store.app.setReady(true)
           return;
         }
         return acis
@@ -98,9 +100,9 @@ class SelectionPanel extends Component {
     })
   }
 
-  getSisterStationData (idAndNetwork) {
+  getSisterStationData (idAndNetwork, acis) {
     const [id, network] = idAndNetwork.split(' ')
-    const {getStartDate, rEndDate} = this.props.store.app
+    const {pest, getStartDate, rEndDate} = this.props.store.app
 
     const params = {
       sid: `${id} ${network}`,
@@ -108,9 +110,62 @@ class SelectionPanel extends Component {
       edate: rEndDate,
       elems: networkTemperatureAdjustment(network)
     };
+    console.log(params)
     return axios.post('http://data.test.rcc-acis.org/StnData', params)
     .then(res => {
-      
+      if(!res.data.hasOwnProperty('error')) {
+        const sisterFlat = flattenArray(res.data.data)
+        const acisSister = replaceConsecutiveMissingValues(sisterFlat, acis);
+
+        // If not missing values
+        if (acisSister.filter(e => e === 'M').length === 0) {
+          this.props.store.app.updateDegreeDay(
+            calculateDegreeDay(pest, unflattenArray(acisSister))
+          );
+          this.props.store.app.setReady(true)
+          return;
+        }
+
+        // if missing values and current year go to forecast
+        if(format(rEndDate, 'YYYY') === this.state.currentYear) {
+          return acisSister
+        } else {
+          console.log('last')
+          // if missing values and not current year
+          const results = unflattenArray(acisSister)
+          this.props.store.app.setMissingValue(calculateMissingValues(results))
+          return;
+        }
+      }
+      console.log(res.data.error)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
+
+  forecast (acisSister) {
+    const {pest, station, getStartDate, rEndDate} = this.props.store.app
+    return axios.get(`http://newa.nrcc.cornell.edu/newaUtil/getFcstData/${station.id}/${station.network}/temp/${getStartDate}/${rEndDate}`)
+    .then(res => {
+      if(!res.data.hasOwnProperty('error')) {
+        const forecastFlat = flattenArray(res.data.data)
+        const acisSisterForecast = replaceConsecutiveMissingValues(forecastFlat, acisSister);
+
+        // If not missing values
+        if (acisSisterForecast.filter(e => e === 'M').length === 0) {
+          this.props.store.app.updateDegreeDay(
+            calculateDegreeDay(pest, unflattenArray(acisSisterForecast))
+          );
+          this.props.store.app.setReady(true)
+          return;
+        }
+        // if missing values
+        const results = unflattenArray(acisSisterForecast)
+        this.props.store.app.setMissingValue(calculateMissingValues(results))
+        this.props.store.app.setReady(true)
+      }
+      console.log(res.data.error)
     })
     .catch(err => {
       console.log(err)
@@ -118,14 +173,12 @@ class SelectionPanel extends Component {
   }
 
   async run () {
-    const {station} = this.props.store.app
     try {
       const acis = await this.getACISData();
-      console.log(acis)
       if (acis) {
         const idAndNetwork = await this.getSisterStationIdAndNetwork()
-        const sisterdata = this.getSisterStationData(idAndNetwork)
-
+        const acisSister = await this.getSisterStationData(idAndNetwork, acis)
+        if(acisSister) return this.forecast(acisSister)
       }
     } catch (e) {
       console.error(e);
