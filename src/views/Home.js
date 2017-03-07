@@ -12,7 +12,7 @@ export default class Home extends Component {
 
     return (
       <ViewWrapper>
-        <h3>Please make a selection from the menu on the left</h3>
+        <h5>Please make a selection from the menu on the left</h5>
       </ViewWrapper>
     )
   }

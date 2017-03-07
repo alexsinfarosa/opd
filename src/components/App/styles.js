@@ -53,6 +53,7 @@ export const Ul = styled.ul`
   font-family: Helvetica,Arial,sans-serif;
   color: #3f3731;
   position: relative;
+  background: linear-gradient(#cb842e, #d49768 );
 `;
 
 export const Header = styled.div`

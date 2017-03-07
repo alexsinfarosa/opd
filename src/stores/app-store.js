@@ -15,6 +15,8 @@ export default class AppStore {
     this.pest = this.pests.filter(pest => pest.informalName === informalName)[0];
     localStorage.setItem('pest', JSON.stringify(this.pest))
   };
+  @observable rPest = {}
+  @action setRpest = d => this.rPest = d
 
   // state -----------------------------------------------------------------------
   @observable state = {};
@@ -22,6 +24,8 @@ export default class AppStore {
     this.state = states.filter(state => state.name === stateName)[0];
     localStorage.setItem('state', JSON.stringify(this.state));
   };
+  @observable rState = {}
+  @action setRstate = d => this.rState = d
 
   // stations --------------------------------------------------------------------
   @observable stations = [];
@@ -41,10 +45,14 @@ export default class AppStore {
     this.station = this.stations.filter(station => station.name === stationName)[0];
     localStorage.setItem('station', JSON.stringify(this.station))
   };
+  @observable rStation = {}
+  @action setRstation = d => this.rStation = d
 
   // DATES -----------------------------------------------------------------------
   @observable endDate = new Date();
-  @action setEndDate = e => this.endDate = format(e, 'YYYY-MM-DD');
+  @action setEndDate = d => this.endDate = format(d, 'YYYY-MM-DD');
+  @observable rEndDate = '';
+  @action setRendDate = d => this.rEndDate = format(d, 'YYYY-MM-DD')
   @computed get getStartDate() {return `${format(this.endDate, 'YYYY')}-01-01`}
 
   // stage -----------------------------------------------------------------------
@@ -103,18 +111,5 @@ export default class AppStore {
     return Object.keys(
       this.pest && this.state && this.station && this.endDate
     ).length === 0;
-  }
-  // Results----------------------------------------------------------------------
-  @observable rPest = {}
-  @action setRpest = d => this.rPest = d
-  @observable rState = {}
-  @action setRstate = d => this.rState = d
-  @observable rStation = {}
-  @action setRstation = d => this.rStation = d
-  @observable rendDate = ''
-  @action setREndDate = d => {
-    // const endDatePlusFiveDays = addDays(this.endDate, 5);
-    // this.rEndDate = format(endDatePlusFiveDays, 'YYYY-MM-DD');
-    this.rendDate = format(d, 'YYYY-MM-DD')
   }
 }
