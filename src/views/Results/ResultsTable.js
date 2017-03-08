@@ -31,11 +31,11 @@ export default class ResultsTable extends Component {
       getDate,
       getDegreeDay,
       station,
-      rendDate
+      rEndDate
     } = this.props.store.app;
 
     const displayMonths = getDate.map(date => {
-      if(isBefore(subDays(date,1), rendDate)) {
+      if(isBefore(subDays(date,1), rEndDate)) {
         return <th className="months before"key={date}>{format(date,'MMM D')}</th>
       } else {
         return <th className="months after"key={date}>{format(date,'MMM D')}</th>

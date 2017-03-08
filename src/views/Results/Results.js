@@ -25,7 +25,7 @@ export default class Results extends Component {
     if(!ready) {
       return (
         <div className="centered">
-          Loading <Spinner spinnerName='circle' style={{marginLeft: '10px'}}/>
+          Loading <Spinner spinnerName='circle' noFadeIn style={{marginLeft: '10px'}}/>
         </div>
       )
     } else {

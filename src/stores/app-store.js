@@ -70,7 +70,6 @@ export default class AppStore {
   @action setACISData = d => this.ACISData = d;
   @computed get getDate() {
     return this.ACISData.map(e => e[0])
-    // return days.map(e => format(e, 'MMM D'))
   }
 
   // degreeDay -------------------------------------------------------------------

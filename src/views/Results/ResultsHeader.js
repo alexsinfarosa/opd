@@ -8,8 +8,8 @@ import {Center} from './styles'
 @inject('store') @observer
 export default class ResultsHeader extends Component {
   render() {
-    const {rPest, rStation, getStartDate, rendDate, currentCDD, missingValue} = this.props.store.app
-    const displayEndDate = format(rendDate, 'MM/DD/YYYY')
+    const {rPest, rStation, getStartDate, rEndDate, currentCDD, missingValue} = this.props.store.app
+    const displayEndDate = format(rEndDate, 'MM/DD/YYYY')
     const displayStartDate = format(getStartDate, 'MM/DD/YYYY')
     return (
       <div>

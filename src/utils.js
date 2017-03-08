@@ -164,12 +164,13 @@ export const unflattenArray = data => {
 // compute degree days
 export const calculateDegreeDay = (pest, data) => {
   console.log(`number of days: ${flattenArray(data).length}`)
-  
-  const cleanedData = data.map(day => day.filter(e => e !== 'M'))
-  const removedMissingDays = cleanedData.filter(day => day.length !== 0)
 
-  const min = removedMissingDays.map(day => Math.min(...day))
-  const max = removedMissingDays.map(day => Math.max(...day))
+  const cleanedData = data.map(day => day.filter(e => e !== 'M'))
+  // const removedMissingDays = cleanedData.filter(day => day.length !== 0)
+
+
+  const min = cleanedData.map(day => Math.min(...day))
+  const max = cleanedData.map(day => Math.max(...day))
   const avg = min.map((val, i) => Math.round((val + max[i]) / 2))
   const base = pest.baseTemp
   const dd = avg.map(val => val - base > 0 ? val - base : 0)

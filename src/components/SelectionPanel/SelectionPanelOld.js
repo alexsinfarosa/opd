@@ -51,7 +51,7 @@ class SelectionPanel extends Component {
     this.props.store.app.setRpest(pest)
     this.props.store.app.setRstate(state)
     this.props.store.app.setRstation(station)
-    this.props.store.app.setREndDate(endDate)
+    this.props.store.app.setRendDate(endDate)
 
     // get data from ACIS
     this.getACISdata()
@@ -59,13 +59,13 @@ class SelectionPanel extends Component {
   }
 
   getACISdata = () => {
-    const { station, rendDate, getStartDate } = this.props.store.app;
-    const rEndDate = addDays(rendDate, 5)
+    const { station, rEndDate, getStartDate } = this.props.store.app;
+    const endDateR = addDays(rEndDate, 5)
     // Creating the object for the POST request
     const params = {
       sid: `${michiganIdAdjustment(station)} ${station.network}`,
       sdate: format(getStartDate, 'YYYY-MM-DD'),
-      edate: format(rEndDate, 'YYYY-MM-DD'),
+      edate: format(endDateR, 'YYYY-MM-DD'),
       elems: networkTemperatureAdjustment(station.network)
     };
 
@@ -97,8 +97,8 @@ class SelectionPanel extends Component {
     console.log(
       '------------------------------------------------------------------------'
     );
-    const { pest, station, getStartDate, rendDate } = this.props.store.app;
-    const rEndDate = addDays(rendDate, 5)
+    const { pest, station, getStartDate, rEndDate } = this.props.store.app;
+    const endDateR = addDays(rEndDate, 5)
     const dataFlat = flattenArray(data);
     console.log(`current station: ${dataFlat.filter(e => e === 'M').length}`);
     // console.log(dataFlat.toString());
@@ -131,7 +131,7 @@ class SelectionPanel extends Component {
         const params = {
           sid: `${res[0]} ${res[1]}`,
           sdate: format(getStartDate, 'YYYY-MM-DD'),
-          edate: format(rEndDate, 'YYYY-MM-DD'),
+          edate: format(endDateR, 'YYYY-MM-DD'),
           elems: networkTemperatureAdjustment(res[1])
         };
         // Making the call to the API
@@ -162,7 +162,7 @@ class SelectionPanel extends Component {
                 );
                 return;
               } else {
-                if (format(subDays(rEndDate, 5), 'YYYY') === this.state.currentYear) {
+                if (format(subDays(endDateR, 5), 'YYYY') === this.state.currentYear) {
                   console.log('inside forecast')
                   return currentFlat;
                 } else {
