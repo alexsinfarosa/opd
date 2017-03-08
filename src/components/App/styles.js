@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 // import flex from '../../styles/flex';
 
 export const Page = styled.div`
@@ -6,26 +6,26 @@ export const Page = styled.div`
   height: 100vh;
   justify-content: center;
   align-items: center;
-  ${''/* background-color: lightgreen; */}
+  ${/* background-color: lightgreen; */ ""}
 `;
 
 export const App = styled.div`
   width: 910px;
-  height: 680px;
+  ${/* height: 680px; */ ""}
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
   padding: 20px;
-  overflow: auto;
-  ${''/* background-color: pink; */}
+  ${/* overflow: auto; */ ""}
+  ${/* background-color: pink; */ ""}
 `;
 
 export const AppWrapper = styled.div`
   display: flex;
   width: 100%;
-  ${''/* background-color: orange; */}
-  overflow: auto;
+  ${/* background-color: orange; */ ""}
+  ${/* overflow: auto; */ ""}
 `;
 
 export const ViewWrapper = styled(AppWrapper)`
@@ -71,23 +71,23 @@ export const LeftPanel = styled.div`
   font-size: 15px;
   font-weight: 500;
   border-radius: 5px;
-`
+`;
 
 export const RightPanel = styled.div`
   border: 1px solid #E0CFC2;
   background-color: #F4F0EC;
-  height: 608px;
+  min-height: 608px;
   flex: 1;
   padding: 10px;
   border-radius: 5px;
   overflow: auto;
-`
+`;
 
 export const Images = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 export const Img = styled.img`
   width: 70px;
   height: auto;
-`
+`;

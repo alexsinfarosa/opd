@@ -1,33 +1,36 @@
-import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+import React, { Component } from "react";
+import { inject, observer } from "mobx-react";
 // import mobx from 'mobx';
 
 // styled-components
-import {Select, Selector} from './styles'
+import { Select, Selector } from "./styles";
 
-@inject('store') @observer
+@inject("store")
+@observer
 class StationSelector extends Component {
-
   state = {
     isDisabled: false
-  }
+  };
 
   handleChange = e => {
-    this.setState({isDisabled: true})
-    this.props.store.app.setStation(e.target.value)
-  }
+    this.setState({ isDisabled: true });
+    this.props.store.app.setStation(e.target.value);
+  };
 
-  render () {
+  render() {
     // console.log(mobx.toJS(this.props.store.app.station))
 
-    const {getCurrentStateStations} = this.props.store.app
-    const {isDisabled} = this.state
+    const { getCurrentStateStations } = this.props.store.app;
+    const { isDisabled } = this.state;
 
-    const stationList = getCurrentStateStations.map(station => <option key={`${station.id} ${station.network}`}>{station.name}</option>)
+    const stationList = getCurrentStateStations.map(station => (
+      <option key={`${station.id} ${station.network}`}>{station.name}</option>
+    ));
 
     return (
       <Selector>
-        <label>Wheater station:
+        <label>
+          Weather station:
           <span>{getCurrentStateStations.length}</span>
         </label>
 
@@ -40,7 +43,7 @@ class StationSelector extends Component {
           {stationList}
         </Select>
       </Selector>
-    )
+    );
   }
 }
 
